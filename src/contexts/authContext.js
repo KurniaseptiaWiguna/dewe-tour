@@ -2,7 +2,6 @@ import { createContext, useReducer } from "react";
 
 // this is initial value for global auth state (context)
 const initialValue = {
-  
   isLogin: false,
   user: {
     email: "",
@@ -14,12 +13,9 @@ const initialValue = {
 export const AuthContext = createContext();
 
 // reducer use to handle complex logic, use wisely
-function reducer(state, action) {
-  const [showLogin, setShowLogin]= useState(false);
-  const [showRegister, setShowRegister] = useState(false);
+const reducer =(state, action)=> {
   const { type, payload } = action;
   switch (type) {
-
     case "LOGIN":
       localStorage.setItem(
         "user",
@@ -63,10 +59,10 @@ function reducer(state, action) {
  * @param {*} children
  * @returns
  */
-const AuthContextProvider = ({ children }) => {
+const AuthContextProvider = ({ props }) => {
   const [state, dispatch] = useReducer(reducer, initialValue);
 
-  return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ state, dispatch }}>{props.children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvider;

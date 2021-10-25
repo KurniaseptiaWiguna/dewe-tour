@@ -1,7 +1,7 @@
 import React, {useReducer,useEffect} from 'react';
 import { Nav, Navbar,Button } from "react-bootstrap";
 import { Container } from "react-bootstrap";
-import LoginModal from '../component/modal/login'
+import LoginModal from './modal/Login'
 import RegisterModal from '../component/modal/register'
 export default function NavigationBar(){
     const initialState= {

@@ -1,3 +1,4 @@
+
 #home-header {
     font-family:Product Sans;
     width: 100vw;
@@ -14,10 +15,13 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height:86vh;
+    height:90vh;
   }
   .overlapping-card{
-    margin-top:-75px;
+    margin-top:-60px;
+  }
+  .overlapping-card p {
+    font-size: 15px;
   }
   .footer-img{
     width: 120px;
@@ -29,6 +33,16 @@
 .custom-input{
   background-color:rgba(210, 210, 210, 0.25);
 }
-  
+.leaf{
+  width: 130px;
+  height: 80px;
+  background-image: url(/src/assets/img/palm.png)
+}
+.hibiscus{
+  width: 60px;
+  height: 60px;
+  float:right;
+  background-image: url(/src/assets/img/hibiscus.png)
+}
 
   

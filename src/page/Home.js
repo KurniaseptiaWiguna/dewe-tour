@@ -35,7 +35,7 @@ export default function Home(){
                 </Col>
             </Row> 
         </Container>
-        <h1 className="text-center">Group Tour</h1>
+            <h1 className="text-center my-5">Group Tour</h1>
         <TripCard />
         <Container>
 
