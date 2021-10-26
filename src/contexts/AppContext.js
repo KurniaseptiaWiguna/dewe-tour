@@ -7,25 +7,84 @@ const initialState = {
     user:{
         email:"",
         password:"",
+        role:"",
         
-    }
+    },
+    modalLogin: false,
+    modalRegister:false,
 
 } ;
 
+localStorage.setItem("user", JSON.stringify(initialState))
+
 const reducer = (state,action) => {
     switch (action.type) {
+        case 'SHOW_LOGIN':
+            return {
+                ...state,
+                modalLogin: true};
+        case 'SHOW_REGISTER':
+            return{
+                ...state,
+                modalRegister: true};
+        case 'HIDE_LOGIN':
+            return {
+                ...state,
+                modalLogin:false};
+        case 'HIDE_REGISTER':
+            return {
+                ...state,
+                modalRegister:false};
+        case 'SWITCH_MODAL':
+            return {
+                ...state,
+            modalRegister: !state.modalRegister,
+            modalLogin : !state.modalLogin,
+        };
         case 'LOGIN':
+            const formData= {
+                email:action.payload.email,
+                password: action.payload.password,
+                role: action.payload.role,
+            }
+            console.log(action.payload.role)
             localStorage.setItem(
                 "user",
                 JSON.stringify({
                     isLogin: true,
-                    user: {
-                        email: action.payload.email,
-                        password:action.payload.password,
-                        
-                    }
+                    user: formData
                 })
             );
+            return{
+                ...state,
+                isLogin:true,
+                user: {
+                    formData
+                }
+            }
+        case 'REGISTER':
+            
+            const oldData = JSON.parse(localStorage.getItem("Users"));
+            const newData = {
+                fullname:action.payload.fullName,
+                email:action.payload.email,
+                password:action.payload.password,
+                phone: action.payload.phone,
+                role:action.payload.role,
+            }
+            oldData.push(newData);
+            localStorage.setItem("Users",JSON.stringify(oldData));
+            return {
+                ...state,
+                isLogin:true,
+                user:{
+                    email:action.payload.email,
+                    password:action.payload.password,
+                    role:action.payload.role,
+                }
+            }
+            
+        
         case 'AUTH':
             const loginState = JSON.parse(localStorage.getItem("user"));
 

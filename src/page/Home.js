@@ -1,5 +1,5 @@
 import { Container,Card, Image ,Row,Col} from "react-bootstrap"
-import NavigationBar from "../component/navbar"
+import NavigationBar from "../component/Navbar/navbar1"
 import ContentCard from "../component/home/contentCard"
 import Header from "../component/home/header"
 import TripCard from "../component/home/TripCard"

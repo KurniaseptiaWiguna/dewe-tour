@@ -24,7 +24,16 @@ function Login(props) {
     async function handleOnSubmit(e) {
         e.preventDefault();
         try{
+            
             let newData = data.filter((d) => d.email === email);
+            
+            console.log(newData)
+            
+
+            let role=newData.map(d => {
+                return d.role
+            });
+            role = role.toString();
             let pass =newData.map((d) => { return d.password}).join('') ; 
             console.log(pass);
             if(newData.length > 0){
@@ -34,11 +43,12 @@ function Login(props) {
                     payload: {
                         email,
                         password,
+                        role,
                     }
                 })
                 setEmail("");
-                setPassword("");
-                route('/');
+                setPassword("")
+                route('/')
                 
             }else{
                 console.log("wrong password")
@@ -57,7 +67,7 @@ function Login(props) {
     
     return (
         <>
-           <Modal show={props.show} onHide={props.handleClose} className="modal-dialog-centered" style={{width:"18rem",marginLeft:"40%"}}>
+           <Modal show={props.show} onHide={props.handleClose} className="modal-dialog-centered" style={{width:"20rem",marginLeft:"40%"}}>
                <Row>
                    <Col><span className="leaf position-absolute  top-0 start-100 align-items-right"></span></Col>
                    <Col>

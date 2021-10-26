@@ -1,4 +1,11 @@
-
+body{
+  background-color: rgb(232, 237, 234);
+}
+.bg-navbar{
+    background-image: url(/src/assets/img/bg-navbar.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+}
 #home-header {
     font-family:Product Sans;
     width: 100vw;
@@ -15,10 +22,10 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height:90vh;
+    height:86vh;
   }
   .overlapping-card{
-    margin-top:-60px;
+    margin-top:-90px;
   }
   .overlapping-card p {
     font-size: 15px;
@@ -44,5 +51,6 @@
   float:right;
   background-image: url(/src/assets/img/hibiscus.png)
 }
+
 
   
