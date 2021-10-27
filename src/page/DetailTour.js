@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
     Container,
     Row,
@@ -8,6 +8,10 @@ import {
 } from 'react-bootstrap';
 import NavigationBar from "../component/Navbar/navbar2"
 function DetailTour() {
+    useEffect(() => {
+        console.log('Detail Tour did mount')
+       
+    }, [])
     return (
         <>
             <NavigationBar />
