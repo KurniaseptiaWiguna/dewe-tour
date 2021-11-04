@@ -81,7 +81,7 @@ function Register(props) {
                                                     
                             <Button variant="warning" type="submit" block>Reigister</Button>
                                                      
-                            <NavLink onClick={props.switchModal} className="text-center text-secondary font-size-sm">Don't have an account? Click <span className="fw-bolder">Here</span></NavLink>
+                            <NavLink onClick={props.switchModal} className="text-center text-secondary font-size-sm">Already have an account? Click <span className="fw-bolder">Here</span></NavLink>
                         </Form>
                     </Container>
                 </Modal.Body>

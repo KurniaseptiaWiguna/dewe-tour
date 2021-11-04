@@ -15,7 +15,7 @@ const initialState = {
 
 } ;
 
-localStorage.setItem("user", JSON.stringify(initialState))
+
 
 const reducer = (state,action) => {
     switch (action.type) {
@@ -55,13 +55,16 @@ const reducer = (state,action) => {
                     user: formData
                 })
             );
+            
             return{
                 ...state,
+                modalLogin:false,
                 isLogin:true,
                 user: {
                     formData
                 }
             }
+
         case 'REGISTER':
             
             const oldData = JSON.parse(localStorage.getItem("Users"));
@@ -83,8 +86,24 @@ const reducer = (state,action) => {
                     role:action.payload.role,
                 }
             }
+         
             
-        
+        case 'LOGOUT':
+            localStorage.setItem('user',JSON.stringify({isLogin:false,
+            user:{
+                email:"",
+                password:"",
+                role:"",
+                
+            }}));
+            return{
+                isLogin:false,
+                user:{
+                    email:"",
+                    password:"",
+                    role:"",
+                    
+                }}
         case 'AUTH':
             const loginState = JSON.parse(localStorage.getItem("user"));
 
@@ -96,7 +115,8 @@ const reducer = (state,action) => {
                         email:"",
                         password:"",
                     },
-                };
+                }
+        
         default:
             throw new Error("type doesn't match cases")
     }

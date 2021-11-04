@@ -1,15 +1,16 @@
 // import necessary utility from rrd
 import { Redirect, Route } from "react-router-dom";
-
+import {useContext} from 'react';
 // create component here
 function PrivateRoute({component: Component, ...rest}) {
-    const isSignIn = localStorage.getItem('user');
-    console.log(isSignIn);
+    
+    const isLogin = localStorage.getItem('user');
+    console.log(isLogin);
     return (
         
         <>
 
-            <Route {...rest} render={(props) =>(isSignIn ? <Component {...props} /> : <Redirect to="/" />)}/>
+            <Route {...rest} render={(props) =>(isLogin ? <Component {...props} /> : (<Redirect to="/" /> ))}/>
         </>
     )
 }

@@ -13,7 +13,7 @@ export default function NavigationBar(){
 		if (!state.isLogin) {
 			return <Guest dispatch={dispatch} />;
 		}else{
-            return <User />
+            return <User dispatch={dispatch}/>
         }
         
 		

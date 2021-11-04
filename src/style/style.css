@@ -51,6 +51,8 @@ body{
   float:right;
   background-image: url(/src/assets/img/hibiscus.png)
 }
-
+.trip-card{
+  cursor: pointer;
+}
 
   
