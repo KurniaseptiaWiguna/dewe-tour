@@ -23,6 +23,7 @@ function Price(props) {
 
     useEffect(() => {
         setTotal(calculateTotal());
+        
     }, [count])
 
     function decrease(){
@@ -39,19 +40,12 @@ function Price(props) {
     function handleOnSubmit(e){
         e.preventDefault();
         const data = JSON.parse(localStorage.getItem('Transactions'))
-        const lastData = data[data.length -1];
+        const newId = data.length +1;
         
-    const newId = () => {
-        if(lastData){
-            lastData.map((d) => {
-                return d.id;
-            })
-        }
-        return (1);
-    }
-    
+        console.log(newId)
+    // 
         const newData = {
-            id : newId(),
+            id : newId,
             idUser : state.user.email,
             idTrip : idTrip,
             dateTrip: dateTrip,
@@ -74,7 +68,7 @@ function Price(props) {
                         // count,
                         // total,
             
-            route.push(`/payment/${newId()}`)
+            route.push(`/payment/${newId}/${idTrip}`)
         }catch(e){
             console.log(e)
         }

@@ -22,15 +22,32 @@ import Transactions from './assets/data/transactions.json';
 import { AppContext,AppContextProvider } from "./contexts/AppContext";
 
 
+
 //send data from json to localStorage
-localStorage.setItem('Users',JSON.stringify(Users))
-localStorage.setItem('Trips',JSON.stringify(Trips))
-localStorage.setItem('Transactions',JSON.stringify(Transactions))
+// localStorage.setItem('Users',JSON.stringify(Users))
+// localStorage.setItem('Trips',JSON.stringify(Trips))
+// localStorage.setItem('Transactions',JSON.stringify(Transactions))
 
 
+function initialData() {
+  const userData = JSON.parse(localStorage.getItem("Users"));
+  const tripData = JSON.parse(localStorage.getItem("Trips"));
+  const transactionData = JSON.parse(localStorage.getItem("Transaction"));
+
+  if(!userData){
+    localStorage.setItem('Users',JSON.stringify(Users))
+  }
+  if(!tripData){
+    localStorage.setItem('Trips',JSON.stringify(Trips))
+  }
+  if(!transactionData){
+    localStorage.setItem('Transactions',JSON.stringify(Transactions))
+  }
+}
 function App() {
   //lifeCycle did mount
   useEffect(() => {
+    initialData();
     console.log("App component did mount")
   }, []);
   return (
@@ -39,7 +56,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home}/>
         <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
-        <PrivateRoute exact path="/payment/:id" component={Payment} />
+        <PrivateRoute exact path="/payment/:id/:idTrip" component={Payment} />
         <PrivateRoute exact path="/profile/:id" component= {Profile}/>
         <Route component={NotFound}/>
       </Switch>

@@ -1,12 +1,13 @@
-import { render } from "@testing-library/react";
 import {useEffect,useState, useRef} from "react";
+import { useHistory } from "react-router-dom";
 import { NavLink,Button,OverlayTrigger,Overlay,Popover} from 'react-bootstrap'
 function User({state,dispatch}) {
- 
+ const route = useHistory();
   const popover = (
     <Popover id="popover-basic">
       
       <Popover.Content>
+      <NavLink onClick={()=> route.push('/profile/1')}>Profile</NavLink>
         <NavLink onClick={()=> dispatch({ type: 'LOGOUT' })}>Logout</NavLink>
       </Popover.Content>
     </Popover>

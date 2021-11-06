@@ -1,7 +1,10 @@
 [
     {
+        "id":1,
         "fullname":"wigunaone",
         "email":"kurnia@gmail.com",
+        "gender":"male",
+        "phone":"082117778367",
         "password":"qwertyuiop",
         "role":"admin"
     }
