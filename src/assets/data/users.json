@@ -6,6 +6,7 @@
         "gender":"male",
         "phone":"082117778367",
         "password":"qwertyuiop",
+        "photo":"profileimg.png",
         "role":"admin"
     }
 ]

@@ -71,8 +71,10 @@ const reducer = (state,action) => {
             const newData = {
                 fullname:action.payload.fullName,
                 email:action.payload.email,
-                password:action.payload.password,
+                gender: action.payload.gender,
                 phone: action.payload.phone,
+                password:action.payload.password,
+                photo: action.payload.photo,
                 role:action.payload.role,
             }
             oldData.push(newData);
@@ -89,13 +91,7 @@ const reducer = (state,action) => {
          
             
         case 'LOGOUT':
-            localStorage.setItem('user',JSON.stringify({isLogin:false,
-            user:{
-                email:"",
-                password:"",
-                role:"",
-                
-            }}));
+            localStorage.setItem('user',null)
             return{
                 isLogin:false,
                 user:{

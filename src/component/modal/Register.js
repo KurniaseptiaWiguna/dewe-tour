@@ -33,8 +33,10 @@ function Register(props) {
                     payload: {
                         fullName,
                         email,
-                        password,
+                        gender: "",
                         phone,
+                        password,
+                        photo: "profileimg.png",
                         role,
                     }
                 })
