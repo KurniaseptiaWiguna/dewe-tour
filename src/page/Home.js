@@ -4,7 +4,6 @@ import ContentCard from "../component/home/contentCard"
 import Header from "../component/home/header"
 import TripCard from "../component/home/TripCard"
 import Footer from "../component/footer"
-import Users from "../assets/data/users.json"
 import { AppContext } from "../contexts/AppContext"
 import { useEffect,useContext } from "react"
 export default function Home(){

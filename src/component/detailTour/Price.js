@@ -68,7 +68,7 @@ function Price(props) {
                         // count,
                         // total,
             
-            route.push(`/payment/${newId}/${idTrip}`)
+            route.push(`/payment/${newId}`)
         }catch(e){
             console.log(e)
         }

@@ -11,7 +11,6 @@ function UserTransaction() {
     const [detailTransaction,setDetailTransaction] = useState(transaction.filter((filter) => filter.idUser == state.user.id));
     console.log(transaction)
     const trip =  JSON.parse(localStorage.getItem('Trips'));
-    const detailTrip = trip.filter((filter) => filter.id == params.idTrip);
     
     const user =  JSON.parse(localStorage.getItem('Users'));
     const detailUser = user.filter((filter) => filter.email == state.user.email);

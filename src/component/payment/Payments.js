@@ -1,45 +1,28 @@
 import {useState, useContext} from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams,useHistory, NavLink} from 'react-router-dom';
 import {Row,Col,Modal,Button,Table, Container,Image} from 'react-bootstrap';
 import {AppContext} from '../../contexts/AppContext';
 import { converToRupiah } from '../../assets/Currency';
-function PaymentCard() {
+function Payments() {
     const [state,dispatch]= useContext(AppContext);
     const params = useParams();
+    const route = useHistory();
     const transaction = JSON.parse(localStorage.getItem("Transactions"));
-    const [detailTransaction, setDetailTransaction] = useState(transaction.filter((filter) => filter.id == params.id))
-    console.log(transaction)                                                                                 
+    const [detailTransaction, setDetailTransaction] = useState(transaction.filter((filter) => filter.idUser == state.user.id))
+    console.log(transaction)  
+    console.log(detailTransaction)                                                                               
     const trip = JSON.parse(localStorage.getItem('Trips'));
-    const detailTrip = trip.filter((filter) => filter.id == params.idTrip);
      
     const user = JSON.parse(localStorage.getItem('Users'));
     const detailUser = user.filter((filter) => filter.email == state.user.email);
     
     
-    function handleOnSubmit() {
-        
-        const oldData = transaction.filter((filter) => filter.id != params.id );
-        const newData = detailTransaction.map((d) => {
-            return {
-                attachment: null,
-                bookingDate: d.bookingDate,
-                dateTrip: d.dateTrip,
-                id: d.id,
-                idTrip: d.idTrip,
-                idUser: d.idUser,
-                qty: d.qty,
-                status: "Waiting Approve",
-                total: d.total
-            }
-        })
-        let data = [ ...oldData, ...newData]
-        localStorage.setItem("Transactions", JSON.stringify(data))
-        
-    }
+    
 
     return (
         <> 
         {detailTransaction.map(d => {
+            const url = `/payment/${d.id}`;
             const detailTrip = trip.filter((filter) => filter.id == d.idTrip);
             const displayStatus = () => {
                 if(d.status == "Waiting payment"){
@@ -53,7 +36,7 @@ function PaymentCard() {
             return(
                 <>
                 
-            
+            <NavLink to={url} style={{textDecoration: "none"}}>
            <Modal.Dialog size="xl" bg="dark">
             <Modal.Body className="p-3">
                 <Container>
@@ -153,7 +136,7 @@ function PaymentCard() {
 
             
             </Modal.Dialog>
-            <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleOnSubmit}>Pay</Button>
+            </NavLink>
             </>
             )
     })}
@@ -162,4 +145,4 @@ function PaymentCard() {
     
 }
 
-export default PaymentCard
+export default Payments

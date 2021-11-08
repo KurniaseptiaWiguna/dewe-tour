@@ -12,8 +12,9 @@ import NotFound from "./component/NotFound";
 import Home from './page/Home';
 import DetailTrip from "./page/DetailTrip";
 import Payment from "./page/Payment";
+import PaymentList from './page/PaymentList'
 import Profile from './page/Profile';
-
+import Trip from './page/Trips';
 //initial data from json
 import Users from './assets/data/users.json'
 import Trips from './assets/data/trips.json'
@@ -29,7 +30,7 @@ import { AppContext,AppContextProvider } from "./contexts/AppContext";
 // localStorage.setItem('Transactions',JSON.stringify(Transactions))
 
 
-function initialData() {
+
   const userData = JSON.parse(localStorage.getItem("Users"));
   const tripData = JSON.parse(localStorage.getItem("Trips"));
   const transactionData = JSON.parse(localStorage.getItem("Transaction"));
@@ -43,11 +44,11 @@ function initialData() {
   if(!transactionData){
     localStorage.setItem('Transactions',JSON.stringify(Transactions))
   }
-}
+
 function App() {
   //lifeCycle did mount
   useEffect(() => {
-    initialData();
+    
     console.log("App component did mount")
   }, []);
   return (
@@ -56,8 +57,10 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home}/>
         <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
-        <PrivateRoute exact path="/payment/:id/:idTrip" component={Payment} />
-        <PrivateRoute exact path="/profile/:id" component= {Profile}/>
+        <PrivateRoute exact path="/Paymentlist" component= {PaymentList} />
+        <PrivateRoute exact path="/payment/:id" component={Payment} />
+        <PrivateRoute exact path="/payment/:id" component={Payment} />
+        <PrivateRoute exact path="/trips" component= {Trip}/>
         <Route component={NotFound}/>
       </Switch>
     </Router>

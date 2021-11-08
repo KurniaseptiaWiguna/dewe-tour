@@ -24,7 +24,7 @@ function Login(props) {
     async function handleOnSubmit(e) {
         e.preventDefault();
         try{
-            
+            const data = JSON.parse(localStorage.getItem("Users"));
             let newData = data.filter((d) => d.email === email);
             
             console.log(newData)
