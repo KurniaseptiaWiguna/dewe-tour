@@ -8,7 +8,7 @@ function User({state,dispatch}) {
       
       <Popover.Content>
       <NavLink onClick={()=> route.push('/profile/1')}>Profile</NavLink>
-        <NavLink onClick={()=> dispatch({ type: 'LOGOUT' })}>Logout</NavLink>
+        <NavLink onClick={()=> {dispatch({ type: 'LOGOUT' }); route.push("/")}}>Logout</NavLink>
       </Popover.Content>
     </Popover>
   );

@@ -1,10 +1,12 @@
 import { createContext, useReducer } from "react"
+import { useHistory } from "react-router-dom";
 
 export const AppContext = createContext();
 
 const initialState = {
     isLogin:false,
     user:{
+        id:null,
         email:"",
         password:"",
         role:"",
@@ -42,17 +44,26 @@ const reducer = (state,action) => {
             modalLogin : !state.modalLogin,
         };
         case 'LOGIN':
+            const userData = JSON.parse(localStorage.getItem("Users"));
+            const detailUser = userData.filter(filter => filter.email == action.payload.email)
+            const id = detailUser.map((d) => {
+                return d.id;
+            })
             const formData= {
+                id: id[0],
                 email:action.payload.email,
                 password: action.payload.password,
                 role: action.payload.role,
             }
+            
+            console.log(detailUser)
+            console.log(id)
             console.log(action.payload.role)
             localStorage.setItem(
                 "user",
                 JSON.stringify({
                     isLogin: true,
-                    user: formData
+                    user:formData
                 })
             );
             
@@ -61,6 +72,7 @@ const reducer = (state,action) => {
                 modalLogin:false,
                 isLogin:true,
                 user: {
+                    
                     formData
                 }
             }
@@ -92,6 +104,7 @@ const reducer = (state,action) => {
             
         case 'LOGOUT':
             localStorage.setItem('user',null)
+            
             return{
                 isLogin:false,
                 user:{
@@ -102,16 +115,18 @@ const reducer = (state,action) => {
                 }}
         case 'AUTH':
             const loginState = JSON.parse(localStorage.getItem("user"));
-
+            
             return loginState
                 ? loginState
-                : {
+                :{
                     isLogin: false,
                     user:{
                         email:"",
                         password:"",
                     },
+                    
                 }
+                
         
         default:
             throw new Error("type doesn't match cases")

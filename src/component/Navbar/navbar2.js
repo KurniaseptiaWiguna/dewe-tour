@@ -26,7 +26,7 @@ export default function NavigationBar(){
         <Navbar variant="light" className="bg-navbar shadow-lg" style={{height:"70px"}}>
             <Container className="mb-2">
                 <Nav>
-                <Navbar.Brand href="#home">
+                <Navbar.Brand href="/">
                     <img src={require("../../assets/img/Icon.png").default} height="68px" alt="car" />
                 </Navbar.Brand>
                 </Nav>

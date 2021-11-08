@@ -46,7 +46,7 @@ function Price(props) {
     // 
         const newData = {
             id : newId,
-            idUser : state.user.email,
+            idUser : state.user.id,
             idTrip : idTrip,
             dateTrip: dateTrip,
             bookingDate : bookingDate,
