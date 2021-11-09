@@ -15,7 +15,7 @@ function User({state,dispatch}) {
     <Popover id="popover-basic" onHide="auto">
       
       <Popover.Content>
-        <NavLink className="my-0" onClick={()=> route.push('/profile/1')}>
+        <NavLink className="my-0" onClick={()=> route.push('/profile')}>
           <Row>
           <Col><img src={require("../../assets/img/user 2.png").default} height="28px" style={{cursor:"pointer",paddingBottom:"0px"}}/></Col><Col>Profile</Col>
           </Row>
@@ -40,6 +40,11 @@ function User({state,dispatch}) {
         <NavLink onClick={()=> route.push('/trips')}>
         <Row>
           <Col><img src={require("../../assets/img/journey 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>Trip</Col>
+          </Row>
+        </NavLink>
+        <NavLink onClick={()=> route.push('/transactions')}>
+        <Row>
+          <Col><img src={require("../../assets/img/journey 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>transaction</Col>
           </Row>
         </NavLink>
         <NavLink onClick={()=> {dispatch({ type: 'LOGOUT' }); route.push("/")}}>

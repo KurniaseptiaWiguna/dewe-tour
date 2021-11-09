@@ -15,6 +15,7 @@ import Payment from "./page/Payment";
 import PaymentList from './page/PaymentList'
 import Profile from './page/Profile';
 import Trip from './page/Trips';
+import TransactionsPage from './page/Transactions';
 //initial data from json
 import Users from './assets/data/users.json'
 import Trips from './assets/data/trips.json'
@@ -58,9 +59,11 @@ function App() {
         <Route exact path="/" component={Home}/>
         <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
         <PrivateRoute exact path="/Paymentlist" component= {PaymentList} />
+        <PrivateRoute exact path="/profile" component= {Profile} />
         <PrivateRoute exact path="/payment/:id" component={Payment} />
         <PrivateRoute exact path="/payment/:id" component={Payment} />
         <PrivateRoute exact path="/trips" component= {Trip}/>
+        <PrivateRoute exact path="/transactions" component={TransactionsPage} />
         <Route component={NotFound}/>
       </Switch>
     </Router>

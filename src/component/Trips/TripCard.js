@@ -11,18 +11,7 @@ function TripCard() {
     const [state, dispatch]=useContext(AppContext)
     const route = useHistory();
     const transactions=JSON.parse(localStorage.getItem("Transactions"))
-    function onClickTrip(){
-        TripsData.map((data)=>{
-            if(isLogin){
-                const url = `detail-trip/${data.id}`;
-                return route.push(url)
-            }
-            else{
-                dispatch({type: 'SHOW_LOGIN'});
-            }
-        })
-        
-    }
+    
     return (
         <Container>
             <Row>
@@ -37,7 +26,7 @@ function TripCard() {
                         <>
                             <Col>
                                 
-                                <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}} onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}>
+                                <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}} >
                                 
                                     <img src={require(`../../assets/img/${data.photo}`).default} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>
                                     <Row className="mx-1">

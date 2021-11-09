@@ -14,6 +14,7 @@ const initialState = {
     },
     modalLogin: false,
     modalRegister:false,
+    modalApprove:false
 
 } ;
 
@@ -43,6 +44,16 @@ const reducer = (state,action) => {
             modalRegister: !state.modalRegister,
             modalLogin : !state.modalLogin,
         };
+        case 'SHOW_APPROVE':
+            return {
+                ...state,
+            modalApprove: true
+            };
+        case 'HIDE_APPROVE':
+            return {
+                ...state,
+            modalApprove: false
+                };   
         case 'LOGIN':
             const userData = JSON.parse(localStorage.getItem("Users"));
             const detailUser = userData.filter(filter => filter.email == action.payload.email)
