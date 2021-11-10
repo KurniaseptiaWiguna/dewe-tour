@@ -6,7 +6,7 @@ import './style/style.css'
 import { useEffect,useContext } from "react";
 import {BrowserRouter as Router, Route,Switch,useParams}from "react-router-dom";
 import PrivateRoute from "./component/PrivateRoute";
-
+import AdminRoute from "./component/AdminRoute"
 //pages
 import NotFound from "./component/NotFound";
 import Home from './page/Home';
@@ -15,6 +15,7 @@ import Payment from "./page/Payment";
 import PaymentList from './page/PaymentList'
 import Profile from './page/Profile';
 import Trip from './page/Trips';
+import AddTrip from "./page/AddTrip";
 import TransactionsPage from './page/Transactions';
 //initial data from json
 import Users from './assets/data/users.json'
@@ -62,8 +63,9 @@ function App() {
         <PrivateRoute exact path="/profile" component= {Profile} />
         <PrivateRoute exact path="/payment/:id" component={Payment} />
         <PrivateRoute exact path="/payment/:id" component={Payment} />
-        <PrivateRoute exact path="/trips" component= {Trip}/>
-        <PrivateRoute exact path="/transactions" component={TransactionsPage} />
+        <AdminRoute exact path="/trips" component= {Trip}/>
+        <AdminRoute exact path="/transactions" component={TransactionsPage} />
+        <AdminRoute exact path="/add-trip" component={AddTrip} />
         <Route component={NotFound}/>
       </Switch>
     </Router>
