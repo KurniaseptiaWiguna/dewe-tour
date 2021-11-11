@@ -91,7 +91,10 @@ const reducer = (state,action) => {
         case 'REGISTER':
             
             const oldData = JSON.parse(localStorage.getItem("Users"));
+            console.log(oldData.lenght + " "+ oldData.lenght + 1)
+            const newIdUser = oldData.length + 1;
             const newData = {
+                id: newIdUser,
                 fullname:action.payload.fullName,
                 email:action.payload.email,
                 gender: action.payload.gender,
@@ -124,6 +127,25 @@ const reducer = (state,action) => {
                     role:"",
                     
                 }}
+        case 'ADD_TRIP':
+            const trip = JSON.parse(localStorage.getItem("Trips"));
+            const newIdTrip = trip.length + 1;
+            const newTrip ={
+                id: newIdTrip,
+                title: action.payload.title,
+                country: action.payload.country,
+                accommodation: action.payload.accommodation,
+                transportation: action.payload.transportation,
+                eat: action.payload.eat,
+                day: Number(action.payload.day),
+                night: Number(action.payload.night),
+                dateTrip: action.payload.dateTrip,
+                price: Number(action.payload.price),
+                quota: Number(action.payload.quota),
+                description: action.payload.description
+            }
+            trip.push(newTrip);
+            localStorage.setItem("Trips", JSON.stringify(trip));
         case 'AUTH':
             const loginState = JSON.parse(localStorage.getItem("user"));
             
