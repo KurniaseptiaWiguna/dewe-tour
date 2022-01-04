@@ -6,7 +6,8 @@ import {useHistory} from 'react-router-dom';
 function Trips() {
     const route = useHistory();
     return (
-        <div>
+        <>
+            <div className="cover-page">
             <Navbar/>
             <Container>
                 <Row>
@@ -16,8 +17,9 @@ function Trips() {
             
             </Container>
             <TripCard />
+            </div>
             <Footer/>
-        </div>
+        </>
     )
 }
 

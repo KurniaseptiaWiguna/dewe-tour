@@ -7,9 +7,9 @@ const initialState = {
     isLogin:false,
     user:{
         id:null,
+        name: "",
         email:"",
-        password:"",
-        role:"",
+        status:"",
         
     },
     modalLogin: false,
@@ -53,78 +53,84 @@ const reducer = (state,action) => {
             return {
                 ...state,
             modalApprove: false
-                };   
-        case 'LOGIN':
-            const userData = JSON.parse(localStorage.getItem("Users"));
-            const detailUser = userData.filter(filter => filter.email == action.payload.email)
-            const id = detailUser.map((d) => {
-                return d.id;
-            })
-            const formData= {
-                id: id[0],
-                email:action.payload.email,
-                password: action.payload.password,
-                role: action.payload.role,
+                };  
+        case 'USER_SUCCESS':
+            return{
+                ...state,
+                isLogin:true,
+                user: action.payload,
             }
+        case 'LOGIN':
+            // const userData = JSON.parse(localStorage.getItem("Users"));
+            // const detailUser = userData.filter(filter => filter.email == action.payload.email)
+            // const id = detailUser.map((d) => {
+            //     return d.id;
+            // })
+            // const formData= {
+            //     id: action.payload.id,
+            //     email:action.payload.email,
+            //     password: action.payload.password,
+            //     role: action.payload.status,
+            // }
             
-            console.log(detailUser)
-            console.log(id)
-            console.log(action.payload.role)
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    isLogin: true,
-                    user:formData
-                })
-            );
-            
+            // console.log(detailUser)
+            // console.log(id)
+            // console.log(action.payload.status)
+            // localStorage.setItem(
+            //     "user",
+            //     JSON.stringify({
+            //         isLogin: true,
+            //         user:formData
+            //     })
+            // );
+            localStorage.setItem("token", action.payload.token)
+            // console.log(action.payload.token)
+            console.log(action.payload)
             return{
                 ...state,
                 modalLogin:false,
                 isLogin:true,
-                user: {
-                    
-                    formData
-                }
+                user: action.payload,
             }
-
+        case 'AUTH_ERROR':
         case 'REGISTER':
             
-            const oldData = JSON.parse(localStorage.getItem("Users"));
-            console.log(oldData.lenght + " "+ oldData.lenght + 1)
-            const newIdUser = oldData.length + 1;
-            const newData = {
-                id: newIdUser,
-                fullname:action.payload.fullName,
-                email:action.payload.email,
-                gender: action.payload.gender,
-                phone: action.payload.phone,
-                password:action.payload.password,
-                photo: action.payload.photo,
-                role:action.payload.role,
-            }
-            oldData.push(newData);
-            localStorage.setItem("Users",JSON.stringify(oldData));
-            return {
+            // const oldData = JSON.parse(localStorage.getItem("Users"));
+            // console.log(oldData.lenght + " "+ oldData.lenght + 1)
+            // const newIdUser = oldData.length + 1;
+            // const newData = {
+            //     id: newIdUser,
+            //     fullname:action.payload.fullName,
+            //     email:action.payload.email,
+            //     gender: action.payload.gender,
+            //     phone: action.payload.phone,
+            //     password:action.payload.password,
+            //     photo: action.payload.photo,
+            //     role:action.payload.role,
+            // }
+            // oldData.push(newData);
+            // localStorage.setItem("Users",JSON.stringify(oldData));
+            // localStorage.setItem("token", action.payload.token)
+            // console.log(action.payload.token)
+            console.log(action.payload)
+            return{
                 ...state,
+                modalRegister:false,
                 isLogin:true,
-                user:{
-                    email:action.payload.email,
-                    password:action.payload.password,
-                    role:action.payload.role,
-                }
+                user: action.payload,
             }
          
             
         case 'LOGOUT':
-            localStorage.setItem('user',null)
+            localStorage.removeItem("token")
             
             return{
                 isLogin:false,
                 user:{
+                    id:null,
+                    name: "",
                     email:"",
-                    password:"",
-                    role:"",
+                    status:"",
                     
                 }}
         case 'ADD_TRIP':
@@ -147,15 +153,18 @@ const reducer = (state,action) => {
             trip.push(newTrip);
             localStorage.setItem("Trips", JSON.stringify(trip));
         case 'AUTH':
-            const loginState = JSON.parse(localStorage.getItem("user"));
-            
-            return loginState
-                ? loginState
+            // const loginState = JSON.parse(localStorage.getItem("user"));
+            let token = JSON.stringify(localStorage.getItem("token"));
+            return token ? {
+                isLogin:true,
+            }
                 :{
                     isLogin: false,
                     user:{
+                        id: null,
+                        name:"",
                         email:"",
-                        password:"",
+                        role:"",
                     },
                     
                 }

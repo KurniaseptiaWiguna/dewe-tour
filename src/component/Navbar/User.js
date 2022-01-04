@@ -2,8 +2,8 @@ import {useContext, useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import { NavLink,OverlayTrigger,Overlay,Popover,Row,Col,Image} from 'react-bootstrap'
 import {AppContext} from '../../contexts/AppContext';
-function User({state,dispatch}) {
-  const [state1,dispatch1] = useContext(AppContext)
+function User(state,user) {
+  const [state1, dispatch] = useContext(AppContext)
  const route = useHistory();
 //  const validation = () => {
 //    if(state1.user.role == "admin"){
@@ -11,7 +11,13 @@ function User({state,dispatch}) {
 //    }
 //    return user;
 //  }
-  const User = (
+  useEffect(() => {
+    console.log(state.user)
+    
+  }, [])
+
+// console.log(user);
+  const UserDropDown = (
     <Popover id="popover-basic" onHide="auto">
       
       <Popover.Content>
@@ -33,7 +39,7 @@ function User({state,dispatch}) {
       </Popover.Content>
     </Popover>
   );
-  const Admin = (
+  const AdminDropDown = (
     <Popover id="popover-basic" onHide="auto">
       
       <Popover.Content>
@@ -56,7 +62,11 @@ function User({state,dispatch}) {
     </Popover>
   );
   const DropDown = () => (
-    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={state1.user.role == "admin"? Admin: User} >
+    // <></>
+    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
+      UserDropDown
+      // state.user.role == "admin" ? AdminDropDown : UserDropDown 
+      } >
       <img src={require("../../assets/img/profile.png").default} height="68px" style={{cursor:"pointer"}}/>
     </OverlayTrigger>
   );

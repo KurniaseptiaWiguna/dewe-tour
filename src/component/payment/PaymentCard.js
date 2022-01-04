@@ -1,83 +1,117 @@
-import {useState, useContext} from 'react';
-import { useParams} from 'react-router-dom';
+import {useState, useContext, useEffect} from 'react';
+import { useParams,useHistory} from 'react-router-dom';
+import { BsFillCloudArrowUpFill,BsFillCloudCheckFill } from "react-icons/bs";
 import {Row,Col,Modal,Button,Table, Container,Image} from 'react-bootstrap';
 import {AppContext} from '../../contexts/AppContext';
 import { converToRupiah } from '../../assets/Currency';
+import {useQuery} from 'react-query';
+import {API} from '../../config/api'
+import moment from 'moment';
 function PaymentCard() {
+    const [form, setForm] = useState(
+        {
+            status: "Waiting Approve",
+            attachment: ""
+        }
+    );
+    const [previmage, setprevimage] = useState(null);
     const [state,dispatch]= useContext(AppContext);
+    const api = API();
     const params = useParams();
-    const transaction = JSON.parse(localStorage.getItem("Transactions"));
-    const [detailTransaction, setDetailTransaction] = useState(transaction.filter((filter) => filter.id == params.id))
-    console.log(transaction)                                                                                 
-    const trip = JSON.parse(localStorage.getItem('Trips'));
-    const detailTrip = trip.filter((filter) => filter.id == params.idTrip);
-     
-    const user = JSON.parse(localStorage.getItem('Users'));
-    const detailUser = user.filter((filter) => filter.email == state.user.email);
-    
-    
-    function handleOnSubmit() {
+    let {data: paymentData,refetch} = useQuery("paymentChache", async () => {
+        const config = {
+            method: "GET",
+            headers: {
+                Authorization: "Basic " + localStorage.token,
+            },
+
+        };
+        const response = await api.get(`/transaction/${params.id}`, config);
         
-        const oldData = transaction.filter((filter) => filter.id != params.id );
-        const newData = detailTransaction.map((d) => {
-            return {
-                attachment: null,
-                bookingDate: d.bookingDate,
-                dateTrip: d.dateTrip,
-                id: d.id,
-                idTrip: d.idTrip,
-                idUser: d.idUser,
-                qty: d.qty,
-                status: "Waiting Approve",
-                total: d.total
-            }
+        return response.data;
+    });
+    console.log(paymentData)
+    const getStatus = () => {
+        switch(paymentData?.status){
+            case "Waiting Approve":
+                return <div className="px-2 text-warning fw-bold" style={{color:"yellow"}}>{paymentData?.status}</div>;
+            case "Waiting Payment":
+                return <div className="px-2 text-danger fw-bold" style={{color: "red"}}>{paymentData?.status}</div>;
+            case "Cancel":
+                return <div className="px-2 text-danger fw-bold" style={{color: "red"}}>{paymentData?.status}</div>;
+            case "Approved":
+                return <div className="px-2 text-success fw-bold" style={{color: "green"}}>{paymentData?.status}</div>;
+            
+            
+        }
+    }
+    useEffect(() => {
+        console.log(form)
+    }, [])
+    useEffect(() => {
+        console.log(form)
+    }, [form])
+    
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]:
+            e.target.type === "file" ? e.target.files : e.target.value
         })
-        let data = [ ...oldData, ...newData]
-        localStorage.setItem("Transactions", JSON.stringify(data))
-        
+        if (e.target.name === "attachment") {
+            let url = URL.createObjectURL(e.target.files[0]);
+            console.log(e.target.files[0].name)
+            setprevimage(url);
+          }
+    }
+    async function handleSubmit(e) {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.set("status", form.status)
+            formData.set("attachment", form.attachment[0], form.attachment[0].name)
+            console.log("foto",form.attachment[0].name)
+
+            const config = {
+                method: "PATCH",
+                headers: {
+                    "Authorization": "Basic " + localStorage.token,
+                },
+                body: formData,
+
+            };
+            const response = await api.patch(`payment/${params.id}`,config)
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
         <> 
-        {detailTransaction.map(d => {
-            const detailTrip = trip.filter((filter) => filter.id == d.idTrip);
-            const displayStatus = () => {
-                if(d.status == "Waiting payment"){
-                    return <p className="text-danger">{d.status}</p>
-                }else if(d.status == "Waiting Approve"){
-                    return <p className="text-warning">{d.status}</p>
-                }else{
-                    return <p className="text-success">{d.status}</p>
-                }
-            }
-            return(
-                <>
-                
-            
-           <Modal.Dialog size="xl" bg="dark">
+        <Modal.Dialog size="xl" bg="dark" key={paymentData?.id}>
             <Modal.Body className="p-3">
                 <Container>
                 <Row>
                     <Col><img src={require("../../assets/img/Icon2.png").default} height="50px"/></Col>
                     <Col md="auto" className="text-right float-right">
                         <Row>
-                            <h2 >Booking</h2>
+                            <h2 className='text-center'>Booking</h2>
                         </Row>
                         <Row>
-                            <h5 className="text-secondary">{d.bookingDate}</h5>
+                            <h5 className="text-secondary">{moment(paymentData?.bookingDate).format("llll")}</h5>
                         </Row>
                     </Col>
                 </Row>
-                {detailTrip.map(t => {
-            return(
+                
                 <>
                 <Row>
-                    <Col md="auto">
-                        <Row ><h3 >{t.title}</h3></Row>
-                        <Row><p>{t.country}</p></Row>
+                    <Col className="ml-4">
+                        <Row ><h3 >{paymentData?.trip.title}</h3></Row>
+                        <Row><p>{paymentData?.trip.country.name}</p></Row>
                         <Row>
                             {
-                                <displayStatus />
+                                getStatus()
                             }
                         </Row>
                     </Col>
@@ -85,41 +119,47 @@ function PaymentCard() {
                         <Row>
                             <Col className="my-1">
                                 <Row>Date Trip</Row>
-                                <Row>{d.dateTrip}</Row>
+                                <Row>{moment(paymentData?.dateTrip).format("llll")}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>
-                                <Row>{t.accommodation}</Row>
+                                <Row>{paymentData?.trip.accomodation}</Row>
                             </Col>
                         </Row>
                         <Row>
                             <Col className="my-1"> 
                                 <Row>Transportation</Row>
-                                <Row>Qatar Airways</Row>
+                                <Row>{paymentData?.trip.transportation}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Duration</Row>
-                                <Row>{t.day} day {t.night} night</Row>
+                                <Row>{paymentData?.trip.day} day {paymentData?.trip.night} night</Row>
                             </Col>
                         </Row>
                     </Col>
-                    <Col>
-                        <Image src />
+                    <Col md={2} className='mr-4'>
+                        { previmage === null ? (
+                            <label style={{width:"10rem", marginRight:"30px", cursor: "pointer"}}>
+                                <BsFillCloudArrowUpFill size={64} className='text-center'/>
+                                <input type="file" name="attachment" onChange={handleChange} multiple hidden/>
+
+                            </label>
+                        ):(
+                            <img src={previmage} style={{width: "10rem", height: "10rem"}}/>
+                        )}
+                        
+                        <p className="text-center" style={{fontSize: "14px"}}>upload payment proof</p>
                     </Col>
                 </Row>
                 </>
-                )
-            })}
-
-                <Table>
-                {detailUser.map(u => {
-            return(
-                <>
+                
+                <Table style={{marginTop: "20px"}}>
+                
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Full Name</th>
-                            <th>Last Gemder</th>
+                            <th>Gender</th>
                             <th>Phone</th>
                             <th></th>
                             <th></th>
@@ -128,11 +168,11 @@ function PaymentCard() {
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>{u.fullname}</td>
-                            <td>{u.gender}</td>
-                            <td>{u.phone}</td>
+                            <td>{paymentData?.user.fullname}</td>
+                            <td>{paymentData?.user.gender}</td>
+                            <td>{paymentData?.user.phone}</td>
                             <td>Qty</td>
-                            <td>:{d.qty}</td>
+                            <td>:{paymentData?.qty}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -140,24 +180,21 @@ function PaymentCard() {
                             <td></td>
                             <td></td>
                             <td>Total</td>
-                            <td className="text-danger">{converToRupiah(d.total)}</td>
+                            <td className="text-danger">{converToRupiah(paymentData?.total)}</td>
                         </tr>
     
                     </tbody>
-                    </>
-                    )
-            })}
+                    
+                   
                 </Table>
                 </Container>
             </Modal.Body>
 
             
             </Modal.Dialog>
-            <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleOnSubmit}>Pay</Button>
+            <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleSubmit}>Pay</Button>
             </>
-            )
-    })}
-        </>
+    
     )
     
 }

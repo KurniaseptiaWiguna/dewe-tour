@@ -9,11 +9,12 @@ import User from './User';
 import {AppContext} from '../../contexts/AppContext.js'
 export default function NavigationBar(){
     const [state,dispatch]= useContext(AppContext);
+    const token = localStorage.getItem("token");
     const status = () => {
-		if (!state.isLogin) {
-			return <Guest dispatch={dispatch} />;
+		if (!token) {
+			return <Guest state={state} dispatch={dispatch} />;
 		}else{
-            return <User dispatch={dispatch}/>
+            return <User state={state} dispatch={dispatch}/>
         }
         
 		

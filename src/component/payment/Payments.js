@@ -1,42 +1,71 @@
 import {useState, useContext} from 'react';
 import { useParams,useHistory, NavLink} from 'react-router-dom';
-import {Row,Col,Modal,Button,Table, Container,Image} from 'react-bootstrap';
+import {Row,Col,Modal,Table, Container,Image} from 'react-bootstrap';
 import {AppContext} from '../../contexts/AppContext';
+import {useQuery} from 'react-query';
+import { API } from '../../config/api';
 import { converToRupiah } from '../../assets/Currency';
+import NoData from '../../assets/img/nodata.png'
 function Payments() {
     const [state,dispatch]= useContext(AppContext);
-    const params = useParams();
-    const route = useHistory();
-    const transaction = JSON.parse(localStorage.getItem("Transactions"));
-    const [detailTransaction, setDetailTransaction] = useState(transaction.filter((filter) => filter.idUser == state.user.id))
-    console.log(transaction)  
-    console.log(detailTransaction)                                                                               
-    const trip = JSON.parse(localStorage.getItem('Trips'));
-     
-    const user = JSON.parse(localStorage.getItem('Users'));
-    const detailUser = user.filter((filter) => filter.email == state.user.email);
+    const api = API();
+    const [preview, setPreview] = useState(null); //For image preview
+    const [form, setForm] = useState({
+    image: "",
+    name: "",
+    desc: "",
+    price: "",
+    qty: "",
+  }); 
     
+    let {data: paymentData,refetch} = useQuery("paymentChache", async () => {
+        const config = {
+            method: "GET",
+            headers: {
+                Authorization: "Basic " + localStorage.token,
+            },
+
+        };
+        const response = await api.get("/transaction/user", config);
+        
+        return response.data;
+    });
+    console.log(paymentData)
+    const handleChange = (e) => {
+        setForm({
+          ...form,
+          [e.target.name]: e.target.type === "file" ? e.target.files : e.target.value,
+        });
     
-    
+        // Create image url for preview
+        if (e.target.type === "file") {
+          let url = URL.createObjectURL(e.target.files[0]);
+          setPreview(url);
+        }
+      };
 
     return (
         <> 
-        {detailTransaction.map(d => {
+        {paymentData?.length > 0 ? ( paymentData?.map(d => {
             const url = `/payment/${d.id}`;
-            const detailTrip = trip.filter((filter) => filter.id == d.idTrip);
-            const displayStatus = () => {
-                if(d.status == "Waiting payment"){
-                    return <p className="text-danger">{d.status}</p>
-                }else if(d.status == "Waiting Approve"){
-                    return <p className="text-warning">{d.status}</p>
-                }else{
-                    return <p className="text-success">{d.status}</p>
+            const getStatus = () => {
+                switch(d.status){
+                    case "Waiting Approve":
+                        return <div className="px-2 text-warning fw-bold" style={{color: "yellow"}}>{d.status}</div>;
+                    case "Waiting Payment":
+                        return <div className="px-2 text-danger fw-bold" style={{color: "red"}}>{d.status}</div>;
+                    case "Cancel":
+                        return <div className="px-2 text-danger fw-bold" style={{color: "red"}}>{d.status}</div>;
+                    case "Approved":
+                        return <div className="px-2 text-success fw-bold" style={{color: "green"}}>{d.status}</div>;
+                    
+                    
                 }
             }
             return(
                 <>
                 
-            <NavLink to={url} style={{textDecoration: "none"}}>
+            <NavLink to={url} style={{textDecoration: "none", color: "black"}} key={d.id}>
            <Modal.Dialog size="xl" bg="dark">
             <Modal.Body className="p-3">
                 <Container>
@@ -49,18 +78,46 @@ function Payments() {
                         <Row>
                             <h5 className="text-secondary">{d.bookingDate}</h5>
                         </Row>
+                        <Row> 
+                        {/* onSubmit={(e) => handleSubmit.mutate(e)} */}
+                        <form >
+                        {preview && (
+                <div>
+                  <img
+                    src={preview}
+                    style={{
+                      maxWidth: "150px",
+                      maxHeight: "150px",
+                      objectFit: "cover",
+                    }}
+                    alt="preview"
+                  />
+                </div>
+              )}
+                            <input type="file" id="upload" name="image" hidden onChange={handleChange} />
+                            <label for="upload" className="label-file-add-product">
+                             Upload file
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Product Name"
+                                name="name"
+                                onChange={handleChange}
+                                className="input-edit-category mt-4"
+                            />
+                            </form>
+                        </Row>
                     </Col>
                 </Row>
-                {detailTrip.map(t => {
-            return(
+                
                 <>
                 <Row>
-                    <Col md="auto">
-                        <Row ><h3 >{t.title}</h3></Row>
-                        <Row><p>{t.country}</p></Row>
+                    <Col className="ml-4">
+                        <Row ><h3 >{d.trip.title}</h3></Row>
+                        <Row><p>{d.trip.country.name}</p></Row>
                         <Row>
                             {
-                                <displayStatus />
+                                getStatus()
                             }
                         </Row>
                     </Col>
@@ -72,37 +129,33 @@ function Payments() {
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>
-                                <Row>{t.accommodation}</Row>
+                                <Row>{d.trip.accomodation}</Row>
                             </Col>
                         </Row>
                         <Row>
                             <Col className="my-1"> 
                                 <Row>Transportation</Row>
-                                <Row>Qatar Airways</Row>
+                                <Row>{d.trip.transportation}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Duration</Row>
-                                <Row>{t.day} day {t.night} night</Row>
+                                <Row>{d.trip.day} day {d.trip.night} night</Row>
                             </Col>
                         </Row>
                     </Col>
-                    <Col>
+                    <Col md={2}>
                         <Image src />
                     </Col>
                 </Row>
                 </>
-                )
-            })}
-
+                
                 <Table>
-                {detailUser.map(u => {
-            return(
-                <>
+                
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Full Name</th>
-                            <th>Last Gemder</th>
+                            <th>Gender</th>
                             <th>Phone</th>
                             <th></th>
                             <th></th>
@@ -111,9 +164,9 @@ function Payments() {
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>{u.fullname}</td>
-                            <td>{u.gender}</td>
-                            <td>{u.phone}</td>
+                            <td>{d.user.fullname}</td>
+                            <td>{d.user.gender}</td>
+                            <td>{d.user.phone}</td>
                             <td>Qty</td>
                             <td>:{d.qty}</td>
                         </tr>
@@ -127,9 +180,8 @@ function Payments() {
                         </tr>
     
                     </tbody>
-                    </>
-                    )
-            })}
+                    
+                   
                 </Table>
                 </Container>
             </Modal.Body>
@@ -139,7 +191,19 @@ function Payments() {
             </NavLink>
             </>
             )
-    })}
+    })) : (
+        <div className="text-center align-self-sm-center">
+            <div>
+                <img src={NoData} width="200" />
+            </div>
+            <div>
+            <h1 className="text-center">no data found</h1>
+            </div>
+        
+        </div>
+        )
+    
+    }
         </>
     )
     

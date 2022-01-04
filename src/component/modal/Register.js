@@ -10,8 +10,10 @@ import {
 } from 'react-bootstrap'
 import { useHistory } from 'react-router'
 import { AppContext } from '../../contexts/AppContext';
+import {API} from '../../config/api'
 
 function Register(props) {
+    const api = API();
     const route = useHistory();
     const [state, dispatch]= useContext(AppContext)
     const [fullName, setFullName]= useState();
@@ -19,28 +21,51 @@ function Register(props) {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     
-    const [data,setData] = useState(JSON.parse(localStorage.getItem("Users")));
-
+    
+    const form = {
+        fullname: fullName,
+        email: email,
+        phone: phone,
+        password: password
+    }
     
 
     async function handleOnSubmit(e) {
         e.preventDefault();
-        const role ="user"
+        
         try{
+            const body = JSON.stringify(form)
+            const config = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: body
+            };
+            
+            console.log(body)
+            const response = await api.post("/register", config);
+
+            console.log(response);
             
                 dispatch({
                     type: 'REGISTER',
-                    payload: {
-                        fullName,
-                        email,
-                        gender: "",
-                        phone,
-                        password,
-                        photo: "profileimg.png",
-                        role,
+                    payload:{
+                        id: response.data.id,
+                        name: response.data.fullname,
+                        email: response.data.email,
+                        status: response.data.status,
+                        token: response.data.token,
                     }
                 })
-                
+                localStorage.setItem("token", response.data.token)
+
+                if( response.data.status == "admin"){
+                    route.push("/transactions");
+    
+                }else{
+                    route.push("/")
+                }
         }catch(e){
             console.log(e)
         }

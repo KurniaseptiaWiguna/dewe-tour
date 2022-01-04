@@ -1,5 +1,4 @@
-import {useState,useEffect} from 'react';
-import {Container,Row,Col,Card,Button,Image} from 'react-bootstrap';
+import {Container,Row,Col} from 'react-bootstrap';
 import NavigationBar from '../component/Navbar/navbar2';
 import PaymentCard from '../component/payment/PaymentCard';
 import Footer from '../component/footer';
@@ -7,6 +6,7 @@ import Footer from '../component/footer';
 function Payment() {
     return (
         <>
+          <div className="cover-page">
           <NavigationBar />
           <Container className="mx-auto my-4">
             <Row>
@@ -14,6 +14,7 @@ function Payment() {
             </Row>
                         
           </Container>
+          </div>
           <Footer />  
         </>
     )

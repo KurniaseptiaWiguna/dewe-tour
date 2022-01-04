@@ -3,27 +3,29 @@ import {Row,Col,Button, Container} from 'react-bootstrap';
 import {converToRupiah} from '../../assets/Currency';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
+import {API} from '../../config/api'
 function Price(props) {
+    const api = API();
     const idTrip = props.idTrip;
     const dateTrip = props.dateTrip;
     const format = date => date.toISOString().slice(0, 10);
 
     let bookingDate = format(new Date());
+    const [price, setPrice] = useState(props.price);
     const [total, setTotal] = useState();
     const [count, setCount] = useState(1);
     const [state, dispatch]= useContext(AppContext)
 
     const route = useHistory();
-    const calculateTotal = () => {
-        let calculate = count * props.price;
-        console.log(calculate);
-        return calculate;
+    async function getData() {
+        await setTotal(count * props.price)
     }
-    
+    useEffect(() => {
+        getData()
+    }, [])
 
     useEffect(() => {
-        setTotal(calculateTotal());
-        
+       getData();
     }, [count])
 
     function decrease(){
@@ -37,38 +39,32 @@ function Price(props) {
     }
     
     
-    function handleOnSubmit(e){
+    async function handleOnSubmit(e){
         e.preventDefault();
-        const data = JSON.parse(localStorage.getItem('Transactions'))
-        const newId = data.length +1;
         
-        console.log(newId)
     // 
-        const newData = {
-            id : newId,
-            idUser : state.user.id,
+        const form = {
+            
             idTrip : idTrip,
             dateTrip: dateTrip,
-            bookingDate : bookingDate,
             qty: count,
-            total: total,
-            status: "Waiting payment",
-            attactment: null
 
         }
         
         try{
-            data.push(newData)
-               console.log(data)
-            localStorage.setItem("Transactions", JSON.stringify(data))
-                        // idTrip,
-                        // dateTrip,
-                        // bookingDate,
-                        //count = qty
-                        // count,
-                        // total,
-            
-            route.push(`/payment/${newId}`)
+            const body = JSON.stringify(form)
+            const config = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: "Basic " + localStorage.token,
+                },
+                body: body
+            };
+            console.log(body)
+            const response = await api.post("/transaction", config);
+
+            // route.push(`/payment/${response.data.id}`)
         }catch(e){
             console.log(e)
         }

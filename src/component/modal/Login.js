@@ -6,57 +6,100 @@ import {
     Form,
     Modal,
     Button,
-    NavLink
+    NavLink,
+    Alert
 } from 'react-bootstrap'
 import { useHistory } from 'react-router'
 import { AppContext } from '../../contexts/AppContext';
-
+import {API} from '../../config/api'
 function Login(props) {
     const route = useHistory();
-    const [state, dispatch]= useContext(AppContext)
+    let api = API();
+    const [state, dispatch] = useContext(AppContext)
+    // const [state, dispatch]= useContext(AppContext)
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     
     const [data,setData] = useState(JSON.parse(localStorage.getItem("Users")));
-
+    const form = {
+        email: email,
+        password: password
+    }
     
 
     async function handleOnSubmit(e) {
         e.preventDefault();
         try{
-            const data = JSON.parse(localStorage.getItem("Users"));
-            let newData = data.filter((d) => d.email === email);
+            const body = JSON.stringify(form)
+            const config = {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: body
+            };
             
-            console.log(newData)
-            
+            console.log(body)
+            const response = await api.post("/login", config);
 
-            let role=newData.map(d => {
-                return d.role
-            });
-            role = role.toString();
-            let pass =newData.map((d) => { return d.password}).join('') ; 
-            console.log(pass);
-            if(newData.length > 0){
-            if(pass === password){
+            console.log(response);
+            // if(response.status === "success"){
                 dispatch({
                     type: 'LOGIN',
-                    payload: {
-                        email,
-                        password,
-                        role,
+                    payload:{
+                        id: response.data.id,
+                        name: response.data.fullname,
+                        email: response.data.email,
+                        status: response.data.status,
+                        token: response.data.token,
                     }
-                })
-                setEmail("");
-                setPassword("")
-                route('/')
-                
-            }else{
-                console.log("wrong password")
-            }
+                });
+                localStorage.setItem("token", response.data.token)
+            //    })
+            //    route.push("/trips")
+                if( response.data.status == "admin"){
+                    route.push("/transactions");
+    
+                }else{
+                    route.push("/")
+                }
+            // }
+            // status checking
             
-        }else{
-            console.log("wrong email and password");
-        }
+
+        //     const data = JSON.parse(localStorage.getItem("Users"));
+        //     let newData = data.filter((d) => d.email === email);
+            
+        //     console.log(newData)
+            
+
+        //     let role=newData.map(d => {
+        //         return d.role
+        //     });
+        //     role = role.toString();
+        //     let pass =newData.map((d) => { return d.password}).join('') ; 
+        //     console.log(pass);
+        //     if(newData.length > 0){
+        //     if(pass === password){
+        //         dispatch({
+        //             type: 'LOGIN',
+        //             payload: {
+        //                 email,
+        //                 password,
+        //                 role,
+        //             }
+        //         })
+        //         setEmail("");
+        //         setPassword("")
+        //         route('/')
+                
+        //     }else{
+        //         console.log("wrong password")
+        //     }
+            
+        // }else{
+        //     console.log("wrong email and password");
+        // }
         }catch(e){
 
         }

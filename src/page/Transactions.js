@@ -5,12 +5,14 @@ import { Container } from "react-bootstrap";
 function Transactions() {
     return (
         <>
+        <div className="cover-page">
         <NavigationBar/>
         <Container className="mb-5 pb-5">
             <h1 className="mt-5 mb-3">Incoming Transaction</h1>
             <TransationTable />
         
         </Container>
+        </div>
             <Footer/>
         
         

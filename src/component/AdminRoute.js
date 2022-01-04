@@ -5,7 +5,7 @@ import {AppContext} from '../contexts/AppContext'
 // create component here
 function PrivateRoute({component: Component, ...rest}) {
     const [state,dispatch] = useContext(AppContext)
-    const isLogin = localStorage.getItem('user');
+    const isLogin = localStorage.getItem('token');
     const loginData = JSON.parse(localStorage.getItem('user'));
     // const role = loginData.map((data) =>  {return data.user.role});
     console.log(loginData)
