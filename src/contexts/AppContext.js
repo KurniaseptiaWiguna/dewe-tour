@@ -12,6 +12,7 @@ const initialState = {
         status:"",
         
     },
+    status: "",
     modalLogin: false,
     modalRegister:false,
     modalApprove:false
@@ -58,7 +59,13 @@ const reducer = (state,action) => {
             return{
                 ...state,
                 isLogin:true,
-                user: action.payload,
+                user: {
+                    id: action.payload.id,
+                    name: action.payload.name,
+                    email: action.payload.email,
+                    status: action.payload.status                
+                },
+                status: action.payload.status
             }
         case 'LOGIN':
             // const userData = JSON.parse(localStorage.getItem("Users"));

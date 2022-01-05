@@ -2,8 +2,9 @@ import {useContext, useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import { NavLink,OverlayTrigger,Overlay,Popover,Row,Col,Image} from 'react-bootstrap'
 import {AppContext} from '../../contexts/AppContext';
-function User(state,user) {
-  const [state1, dispatch] = useContext(AppContext)
+function User() {
+  const [state, dispatch] = useContext(AppContext)
+
  const route = useHistory();
 //  const validation = () => {
 //    if(state1.user.role == "admin"){
@@ -12,9 +13,8 @@ function User(state,user) {
 //    return user;
 //  }
   useEffect(() => {
-    console.log(state.user)
-    
-  }, [])
+    console.log(state)
+  }, [state])
 
 // console.log(user);
   const UserDropDown = (
@@ -64,20 +64,13 @@ function User(state,user) {
   const DropDown = () => (
     // <></>
     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-      UserDropDown
-      // state.user.role == "admin" ? AdminDropDown : UserDropDown 
+      
+      state.status === "admin" ? AdminDropDown : UserDropDown 
       } >
       <img src={require("../../assets/img/profile.png").default} height="68px" style={{cursor:"pointer"}}/>
     </OverlayTrigger>
   );
-    useEffect(() => {
-        dispatch({type:'AUTH'});
-    }, [])
-
-    useEffect(() => {
-        
-        
-    }, [state])
+    
     return (
         <>
             

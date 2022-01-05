@@ -19,58 +19,56 @@ import Loading from './component/Loading';
 //context
 import { AppContext} from "./contexts/AppContext";
 import UserTransaction from "./component/profile/UserTransaction";
-
+import {API} from './config/api'
+import PrivateRoute from "./component/PrivateRoute";
+import AdminRoute from "./component/AdminRoute"
 function App() {
+  const api = API();
   const [state,dispatch] = useContext(AppContext)
   const [loading, setLoading] = useState(true)
-//   const checkUser = async () => {
-//   try {
-//     const config = {
-//       method: "GET",
-//       headers: {
-//         Authorization: "Basic " + localStorage.token,
-//       },
-//     };
-//     // const response = await api.get("/check-auth", config);
-//     const response = await api.get("/user",config)
-//     console.log(response.status)
-//     // If the token incorrect
-//     if (response.status === "failed") {
-//       return dispatch({
-//         type: "AUTH_ERROR",
-//       });
-//     }
-//     let payload = response.data.user;
-//     // payload.token = localStorage.token;
-    
-//     // // Send data to useContext
-//     dispatch({
-//       type: "USER_SUCCESS",
-//       payload: payload,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+  const checkUser = async () => {
+    try {
+      const config = {
+              method: "GET",
+              headers: {
+                Authorization: "Basic " + localStorage.token,
+              },
+            };
+      const response = await api.get("/checkAuth", config);
+      if(response.status == "success"){
+        dispatch({
+          type: "USER_SUCCESS",
+          payload: response.data.user,
+              });
+      }
+    } catch (error) {
+      
+    }
+  }
+
   useEffect(() => {
+    checkUser()
     setTimeout(() => setLoading(false),1000)
   }, []);
-  
+  useEffect(() => {
+    console.log(state)
+  }, [state])
+  console.log(state)
   return (
     <>
     {loading === false ? (
       <Router>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <Route exact path="/detail-trip/:id" component={DetailTrip} />
-        <Route exact path="/Paymentlist" component= {PaymentList} />
-        <Route exact path="/profile" component= {Profile} />
-        <Route exact path="/payment/:id" component={Payment} />
+        <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
+        <PrivateRoute exact path="/Paymentlist" component= {PaymentList} />
+        <PrivateRoute exact path="/profile" component= {Profile} />
+        <PrivateRoute exact path="/payment/:id" component={Payment} />
         {/* <Route exact path="/payment/:id" component={Payment} /> */}
-        <Route exact path="/trips" component= {Trip}/>
-        <Route exact path="/transactions" component={TransactionsPage} />
-        <Route exact path="/add-trip" component={AddTrip} />
-        <Route exact path="/test" component= {UserTransaction}/>
+        <AdminRoute exact path="/trips" component= {Trip}/>
+        <AdminRoute exact path="/transactions" component={TransactionsPage} />
+        <AdminRoute exact path="/add-trip" component={AddTrip} />
+        <PrivateRoute exact path="/test" component={NotFound}/> 
         <Route component={NotFound}/>
       </Switch>
     </Router>

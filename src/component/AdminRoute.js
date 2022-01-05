@@ -10,11 +10,12 @@ function PrivateRoute({component: Component, ...rest}) {
     // const role = loginData.map((data) =>  {return data.user.role});
     console.log(loginData)
     console.log(isLogin);
+    console.log(state)
     return (
         
         <>
 
-            <Route {...rest} render={(props) =>(state.isLogin != "" && state.user.role == "admin"  ? <Component {...props} /> : (<Redirect to="/" /> ))}/>
+            <Route {...rest} render={(props) =>(state.isLogin != "" && state.status == "admin"  ? <Component {...props} /> : (<Redirect to="/" /> ))}/>
         </>
     )
 }

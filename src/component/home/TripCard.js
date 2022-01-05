@@ -16,67 +16,20 @@ function TripCard({data,index}) {
   document.title = "Dewe | " + title;
   
     // Fetching product data from database
-  let { data: trips, refetch } = useQuery("tripsCache", async () => {
-    const config = {
-      method: "GET",
-    //   headers: {
-    //     Authorization: "Basic " + localStorage.token,
-    //   },
-    };
-    const response = await api.get("/trips", config);
-    return response.data;
-  });
-  console.log(trips)
+
 
 
     // const TripsData = JSON.parse(localStorage.getItem("Trips"))
     const isLogin = localStorage.getItem("token");
 
     const [state, dispatch]=useContext(AppContext)
-    console.log(state.user)
     const route = useHistory();
-    function onClickTrip(){
-        trips?.map(data=>{
-            if(isLogin){
-                const url = `detail-trip/${data.id}`;
-                return route.push(url)
-            }
-            else{
-                dispatch({type: 'HIDE_LOGIN'});
-            }
-        })
-        
-    }
+   
     return (
         <>
-                {/* {
-                    trips?.map(item => 
-                        // <h1>{data.title}</h1>
-                        <Col key={data.id}>
+            <Col key={index}>
                             <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}}
-                                 onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
-                                 >
-                                
-                                    <img src={url+data.photo[0]} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>
-                                    <Row className="mx-1">
-                                    <p className="text-dark font-weight-bold text-left text-truncate">{data.title}</p>
-                                    </Row>
-                                    
-                                    <Row>
-                                    
-                                        <Col><p className="font-weight-bold text-warning p-0 text-left">{converToRupiah(data.price)}</p></Col>
-                                        <Col><p className="font-weight-bold text-secondary p-0 text-right">{data.country.name}</p></Col>
-                                       
-                                    </Row>
-                                    
-                                </Card>
-                        </Col>
-                    )
-                }
-                 */}
-                 <Col key={index}>
-                            <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}}
-                                 onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
+                                 onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(`detail-trip/${index}`)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
                                  >
                                 
                                     <img src={url+data.photo[0]} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>

@@ -12,7 +12,6 @@ import { useQuery } from "react-query"
 
 // API config
 export default function Home(){
-
     document.title = "Dewe | Tour";
     const [data, setData] = useState()
     const [search, setSearch] = useState("");
@@ -32,7 +31,6 @@ export default function Home(){
             };
             const response = await api.get("/trips", config)
             
-            console.log(response.data)
             setData(response.data)
         } catch (error) {
             console.log(error)
@@ -48,12 +46,12 @@ export default function Home(){
                         Authorization: "Basic " + localStorage.token,
                     },
             };
-            const response = await api.get(`/search/${search}`,config)
+            const response = await api.get(`search/${search}`,config)
             setData(response.data)
             const elemnt = document.getElementById("trips");
             elemnt.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         } catch (error) {
-            console.log(error)
+            await console.log(error)
         }
     }
     const reset = async () => {
@@ -65,12 +63,8 @@ export default function Home(){
         getTrips();
     }, [])
     useEffect(() => {
-       console.log(data)
-    }, [data])
-    useEffect(() => {
         reset()
         searchTrip()
-        console.log(search)
     }, [search])
     return(
         <>
@@ -86,16 +80,16 @@ export default function Home(){
         <Container className="overlapping-card">
             <Row md={4}>
                 <Col>
-                    <ContentCard  image="content.png" title="Best Price Guarantee" text="A small river named Duren flows by teir place and supplies" />
+                    <ContentCard index={1}  image="content.png" title="Best Price Guarantee" text="A small river named Duren flows by teir place and supplies" />
                 </Col>
                 <Col>
-                    <ContentCard  image="heart.png" title="Travellers Love Us" text="A small river named Duren flows by teir place and supplies" />
+                    <ContentCard index={2}  image="heart.png" title="Travellers Love Us" text="A small river named Duren flows by teir place and supplies" />
                 </Col>
                 <Col>
-                    <ContentCard  image="travel.png" title="Best Travel Agent" text="A small river named Duren flows by teir place and supplies" />
+                    <ContentCard index={3}  image="travel.png" title="Best Travel Agent" text="A small river named Duren flows by teir place and supplies" />
                 </Col>
                 <Col>
-                    <ContentCard  image="operator.png" title="Our Dedicated Support" text="A small river named Duren flows by teir place and supplies" />
+                    <ContentCard index={4}  image="operator.png" title="Our Dedicated Support" text="A small river named Duren flows by teir place and supplies" />
                 </Col>
             </Row> 
         </Container>

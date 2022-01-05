@@ -58,6 +58,7 @@ function TransationTable() {
         }
         
     }
+
     const [dataModal, setDataModal] = useState(
         {
             id: "",
@@ -93,7 +94,20 @@ function TransationTable() {
                 status: ""
             }
         });
-    
+    const getStatus = (status) => {
+        switch(status){
+            case "Waiting Approve":
+                return <div className="px-2 text-warning fw-bold" style={{color: "rgba(247, 148, 30, 1)"}}>{status}</div>;
+            case "Waiting Payment":
+                return <div className="px-2 text-danger fw-bold" style={{color: "rgba(255, 7, 66, 1)"}}>{status}</div>;
+            case "Cancel":
+                return <div className="px-2 text-danger fw-bold" style={{color: "rgba(255, 7, 66, 1)"}}>{status}</div>;
+            case "Approved":
+                return <div className="px-2 text-success fw-bold" style={{color: "rgba(10, 207, 131, 1)"}}>{status}</div>;
+            
+            
+        }
+    }
     
     useEffect(() => {
         getDetailData();
@@ -120,8 +134,8 @@ function TransationTable() {
                     <td>{data.id}</td>
                     <td>{data.user.fullname}</td>
                     <td>{data.trip.title}</td>
-                    <td>{data.attachment}</td>
-                    <td>{data.status}</td>
+                    <td>{<a href={`http://localhost:5000/uploads/${data.attachment}`}>{data.attachment}</a>}</td>
+                    <td>{getStatus(data.status)}</td>
                     <td>
        {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
