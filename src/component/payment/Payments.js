@@ -94,17 +94,7 @@ function Payments() {
                   />
                 </div>
               )}
-                            <input type="file" id="upload" name="image" hidden onChange={handleChange} />
-                            <label for="upload" className="label-file-add-product">
-                             Upload file
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Product Name"
-                                name="name"
-                                onChange={handleChange}
-                                className="input-edit-category mt-4"
-                            />
+                           
                             </form>
                         </Row>
                     </Col>

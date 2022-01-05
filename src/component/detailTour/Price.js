@@ -1,5 +1,5 @@
 import {useState,useEffect,useContext} from 'react';
-import {Row,Col,Button, Container} from 'react-bootstrap';
+import {Container,Row,Col,Button, Modal} from 'react-bootstrap';
 import {converToRupiah} from '../../assets/Currency';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
@@ -15,8 +15,11 @@ function Price(props) {
     const [total, setTotal] = useState();
     const [count, setCount] = useState(1);
     const [state, dispatch]= useContext(AppContext)
-
     const route = useHistory();
+
+    const [show, setShow] = useState(false);
+    const handleOpen = () => { setShow(true)}
+    const handleClose = () => { setShow(false)}
     async function getData() {
         await setTotal(count * props.price)
     }
@@ -41,8 +44,6 @@ function Price(props) {
     
     async function handleOnSubmit(e){
         e.preventDefault();
-        
-    // 
         const form = {
             
             idTrip : idTrip,
@@ -50,7 +51,6 @@ function Price(props) {
             qty: count,
 
         }
-        
         try{
             const body = JSON.stringify(form)
             const config = {
@@ -63,7 +63,10 @@ function Price(props) {
             };
             console.log(body)
             const response = await api.post("/transaction", config);
-
+            console.log(response)
+            if(response.status == "success"){
+                handleOpen();
+            } 
             // route.push(`/payment/${response.data.id}`)
         }catch(e){
             console.log(e)
@@ -95,7 +98,10 @@ function Price(props) {
                 <Button variant="warning" className="text-light mb-4" onClick={handleOnSubmit}>Book now</Button>
             </div>
             
-            </Container>   
+            </Container>
+            <Modal show={show} onHide={handleClose}>
+                <h2>Your payment will be confirmed within 1 x 24 hours To see orders click Here thank you</h2>
+            </Modal>
         </>
     )
 }

@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 
 // API config
 import { API } from "../../config/api";
-function TripCard({item,index}) {
+function TripCard({data,index}) {
     const url = "http://localhost:5000/uploads/"
     let api = API();
     const title = "Tour";
@@ -48,25 +48,24 @@ function TripCard({item,index}) {
         
     }
     return (
-        <Container>
-            <Row>
-                {
+        <>
+                {/* {
                     trips?.map(item => 
-                        // <h1>{item.title}</h1>
-                        <Col>
+                        // <h1>{data.title}</h1>
+                        <Col key={data.id}>
                             <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}}
-                                 onClick={()=>{if(isLogin){const url = `detail-trip/${item.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
+                                 onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
                                  >
                                 
-                                    <img src={url+item.photo[0]} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>
+                                    <img src={url+data.photo[0]} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>
                                     <Row className="mx-1">
-                                    <p className="text-dark font-weight-bold text-left text-truncate">{item.title}</p>
+                                    <p className="text-dark font-weight-bold text-left text-truncate">{data.title}</p>
                                     </Row>
                                     
                                     <Row>
                                     
-                                        <Col><p className="font-weight-bold text-warning p-0 text-left">{converToRupiah(item.price)}</p></Col>
-                                        <Col><p className="font-weight-bold text-secondary p-0 text-right">{item.country.name}</p></Col>
+                                        <Col><p className="font-weight-bold text-warning p-0 text-left">{converToRupiah(data.price)}</p></Col>
+                                        <Col><p className="font-weight-bold text-secondary p-0 text-right">{data.country.name}</p></Col>
                                        
                                     </Row>
                                     
@@ -74,11 +73,27 @@ function TripCard({item,index}) {
                         </Col>
                     )
                 }
-                
-                
+                 */}
+                 <Col key={index}>
+                            <Card className="trip-card my-4 p-3" style={{width:"20rem",height:"20rem"}}
+                                 onClick={()=>{if(isLogin){const url = `detail-trip/${data.id}`;return route.push(url)}else{return dispatch({type: 'SHOW_LOGIN'});}}}
+                                 >
                                 
-            </Row>
-         </Container>
+                                    <img src={url+data.photo[0]} className="mx-auto mb-4" style={{width:"18rem",height:"18rem"}} position="center"/>
+                                    <Row className="mx-1">
+                                    <p className="text-dark font-weight-bold text-left text-truncate">{data.title}</p>
+                                    </Row>
+                                    
+                                    <Row>
+                                    
+                                        <Col><p className="font-weight-bold text-warning p-0 text-left">{converToRupiah(data.price)}</p></Col>
+                                        <Col><p className="font-weight-bold text-secondary p-0 text-right">{data.country.name}</p></Col>
+                                       
+                                    </Row>
+                                    
+                                </Card>
+                        </Col>
+         </>
     )
 }
 

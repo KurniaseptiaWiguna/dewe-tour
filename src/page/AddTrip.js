@@ -100,6 +100,7 @@ function AddTrip() {
             //     description: "",
             //     photo: []
             //   })
+
               route.push("/trips")
             
         } catch (error) {

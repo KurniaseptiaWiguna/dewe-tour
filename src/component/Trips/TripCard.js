@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 
 // API config
 import { API } from "../../config/api";
-function TripCard({item,index}) {
+function TripCard({data,index}) {
     let api = API();
     const url = "http://localhost:5000/uploads/"
     const title = "Tour";

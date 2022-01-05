@@ -1,18 +1,75 @@
+import { useState,useContext,useEffect } from "react"
+import { API } from "../config/api"
 import { Container,Row,Col} from "react-bootstrap"
 import NavigationBar from "../component/Navbar/navbar1"
 import ContentCard from "../component/home/contentCard"
-import Header from "../component/home/header"
+import Header from "../component/home/Header"
 import TripCard from "../component/home/TripCard"
 import Footer from "../component/footer"
 import { AppContext } from "../contexts/AppContext"
-import { useContext } from "react"
+
+import { useQuery } from "react-query"
 
 // API config
 export default function Home(){
-    const title = "Tour";
-  document.title = "Dewe | " + title;
+
+    document.title = "Dewe | Tour";
+    const [data, setData] = useState()
+    const [search, setSearch] = useState("");
+    const child = useState({
+        word: "",
+    });
+
     const [state,dispatch] = useContext(AppContext);
-    console.log(state)
+    const api = API();
+    const getTrips =async () => {
+        try {
+            const config = {
+                method: "GET",
+                    headers: {
+                        Authorization: "Basic " + localStorage.token,
+                    },
+            };
+            const response = await api.get("/trips", config)
+            
+            console.log(response.data)
+            setData(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    
+    const searchTrip = async () => {
+        try {
+            const config = {
+                method: "GET",
+                    headers: {
+                        Authorization: "Basic " + localStorage.token,
+                    },
+            };
+            const response = await api.get(`/search/${search}`,config)
+            setData(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const reset = async () => {
+        if(search == ""){
+            getTrips();
+        }
+    }
+    useEffect(() => {
+        getTrips();
+    }, [])
+    useEffect(() => {
+       console.log(data)
+    }, [data])
+    useEffect(() => {
+        reset()
+        searchTrip()
+        console.log(search)
+    }, [search])
     return(
         <>
         <div className="cover-page">
@@ -20,7 +77,7 @@ export default function Home(){
             <div id="home-header">
                 <div className="layer">
                     <NavigationBar state={state} dispatch={dispatch}/>
-                    <Header/>
+                    <Header word={w => setSearch(w)}/>
                 </div>
             </div>
         </header>
@@ -41,16 +98,18 @@ export default function Home(){
             </Row> 
         </Container>
             <h1 className="text-center my-5">Group Tour</h1>
-        <Row>
-                            <TripCard  />
-                        
-            
-            
-        </Row>
         
         <Container>
-
-        </Container>
+            {data?.length > 0 ? 
+                <Row>
+                    {data?.map(item => 
+                        <TripCard data={item} index={item.id} />
+                        )}
+                </Row>
+                : <h2 className="text-center">No data found</h2>
+            }
+        </Container>                
+        
         </div>
         <Footer/>
         
