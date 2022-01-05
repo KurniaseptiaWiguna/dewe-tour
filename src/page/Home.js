@@ -1,5 +1,5 @@
 import { useState,useContext,useEffect } from "react"
-import { API } from "../config/api"
+import {useHistory} from 'react-router-dom'
 import { Container,Row,Col} from "react-bootstrap"
 import NavigationBar from "../component/Navbar/navbar1"
 import ContentCard from "../component/home/contentCard"
@@ -7,20 +7,23 @@ import Header from "../component/home/Header"
 import TripCard from "../component/home/TripCard"
 import Footer from "../component/footer"
 import { AppContext } from "../contexts/AppContext"
+import { API } from "../config/api"
 
 import { useQuery } from "react-query"
 
 // API config
 export default function Home(){
     document.title = "Dewe | Tour";
+    const [state,dispatch] = useContext(AppContext);
+    const api = API();
+    const route = useHistory();
     const [data, setData] = useState()
     const [search, setSearch] = useState("");
     const child = useState({
         word: "",
     });
 
-    const [state,dispatch] = useContext(AppContext);
-    const api = API();
+    
     const getTrips =async () => {
         try {
             const config = {
@@ -54,6 +57,17 @@ export default function Home(){
             await console.log(error)
         }
     }
+
+    const getRoute = () => {
+        if(state.status == "admin"){
+            console.log("redirect ke transactions")
+            route.push("/transactions")
+        }else if(state.status == "user" ){
+            console.log("redirect ke /")
+        }
+    }
+
+
     const reset = async () => {
         if(search == ""){
             getTrips();
@@ -61,6 +75,7 @@ export default function Home(){
     }
     useEffect(() => {
         getTrips();
+        getRoute();
     }, [])
     useEffect(() => {
         reset()

@@ -149,7 +149,9 @@ function PaymentCard() {
                         </Row>
                     </Col>
                     <Col md={2} className='mr-4'>
-                        { previmage === null ? (
+                        { data?.attachment != null ?<img src={`http://localhost:5000/uploads/${data?.attachment}`} style={{height: "10rem", width: "10rem"}}/>  : 
+                            (<>
+                                { previmage === null ? (
                             <label style={{width:"10rem", marginRight:"30px", cursor: "pointer"}}>
                                 <BsFillCloudArrowUpFill size={64} className='text-center'/>
                                 <input type="file" name="attachment" onChange={handleChange} multiple hidden/>
@@ -158,6 +160,9 @@ function PaymentCard() {
                         ):(
                             <img src={previmage} style={{width: "10rem", height: "10rem"}}/>
                         )}
+                            </>)  
+                        }
+                        
                         
                         <p className="text-center" style={{fontSize: "14px"}}>upload payment proof</p>
                     </Col>
@@ -206,7 +211,7 @@ function PaymentCard() {
             <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleSubmit}>Pay</Button>
 
             <Modal show={show} onHide={handleClose} size='lg' centered>
-                <p>Your payment will be confirmed within 1 x 24 hours To see orders click Here thank you</p>
+                <p>Your payment will be confirmed within 1 x 24 hours To see orders click <a href={`/profile`}>Here</a> thank you</p>
             </Modal>
             </>
             

@@ -4,7 +4,7 @@ import './style/style.css'
 
 //component
 import { useState,useEffect,useContext } from "react";
-import {BrowserRouter as Router, Route,Switch}from "react-router-dom";
+import {BrowserRouter as Router, Route,Switch, useHistory}from "react-router-dom";
 //pages
 import NotFound from "./component/NotFound";
 import Home from './page/Home';
@@ -24,6 +24,7 @@ import PrivateRoute from "./component/PrivateRoute";
 import AdminRoute from "./component/AdminRoute"
 function App() {
   const api = API();
+  const route = useHistory();
   const [state,dispatch] = useContext(AppContext)
   const [loading, setLoading] = useState(true)
   const checkUser = async () => {
@@ -41,10 +42,15 @@ function App() {
           payload: response.data.user,
               });
       }
+      const status = response.data.user.status;
+      
+      
     } catch (error) {
       
     }
   }
+
+
 
   useEffect(() => {
     checkUser()

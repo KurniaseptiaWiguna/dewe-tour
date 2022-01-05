@@ -50,7 +50,7 @@ function User() {
         </NavLink>
         <NavLink onClick={()=> route.push('/transactions')}>
         <Row>
-          <Col><img src={require("../../assets/img/journey 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>transaction</Col>
+          <Col><img src={require("../../assets/img/transaction-history.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>transaction</Col>
           </Row>
         </NavLink>
         <NavLink onClick={()=> {dispatch({ type: 'LOGOUT' }); route.push("/")}}>

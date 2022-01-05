@@ -2,10 +2,12 @@ import {useState,useEffect, useContext} from 'react';
 import { useParams,NavLink} from 'react-router-dom';
 import {Row,Col,Modal,Button,Table, Container,Image, ModalDialog} from 'react-bootstrap';
 import {AppContext} from '../../contexts/AppContext';
-import { useQuery } from 'react-query';
 import { converToRupiah } from '../../assets/Currency';
 import NoData from '../../assets/img/nodata.png'
 import {API} from '../../config/api';
+import { QRCode } from "react-qr-svg";
+import moment from 'moment';
+
 function UserTransaction() {
     let api = API()
     const [state,dispatch]= useContext(AppContext);
@@ -25,8 +27,6 @@ function UserTransaction() {
             console.log(error)
         }
     }
-console.log(transactions);
-console.log('this data transactions');
 useEffect(() => {
     getData()
 }, [])
@@ -63,26 +63,10 @@ useEffect(() => {
                             <h2 >Booking</h2>
                         </Row>
                         <Row>
-                            <h5 className="text-secondary">{d.bookingDate}</h5>
+                            <h5 className="text-secondary">{moment(d.bookingDate).format("llll")}</h5>
                         </Row>
                         <Row> 
-                        {/* onSubmit={(e) => handleSubmit.mutate(e)} */}
-                        {/* <form >
-                        {preview && (
-                <div>
-                  <img
-                    src={preview}
-                    style={{
-                      maxWidth: "150px",
-                      maxHeight: "150px",
-                      objectFit: "cover",
-                    }}
-                    alt="preview"
-                  />
-                </div>
-              )}
-                           
-                            </form> */}
+                            
                         </Row>
                     </Col>
                 </Row>
@@ -121,7 +105,14 @@ useEffect(() => {
                         </Row>
                     </Col>
                     <Col md={2}>
-                        <Image src />
+                    <QRCode
+                                bgColor="#FFFFFF"
+                                fgColor="#000000"
+                                level="Q"
+                                style={{ width: 100 }}
+                                value={"Transaction "+d.id}
+                            />
+                        <p>Transaction {d.id}</p>
                     </Col>
                 </Row>
                 </>

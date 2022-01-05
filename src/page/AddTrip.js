@@ -1,7 +1,7 @@
 import {useState, useContext} from 'react'
 import {useQuery} from 'react-query';
 import { API } from '../config/api';
-import {Container,Row,Col,Form, Button} from 'react-bootstrap';
+import {Container,Row,Col,Form,Modal, Button} from 'react-bootstrap';
 import NavigationBar from '../component/Navbar/navbar2';
 import Footer from '../component/footer';
 import {AppContext} from '../contexts/AppContext'
@@ -134,28 +134,28 @@ function AddTrip() {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Accommodation</Form.Label>
-                            <Form.Control name="accomodation" onChange={ handleChange }   />
+                            <Form.Control name="accomodation" onChange={ handleChange }   required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Transportation</Form.Label>
-                            <Form.Control name="transportation" onChange={handleChange }    />
+                            <Form.Control name="transportation" onChange={handleChange }    required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Eat</Form.Label>
-                            <Form.Control name="eat" onChange={handleChange }  />
+                            <Form.Control name="eat" onChange={handleChange }  required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Duration</Form.Label>
                             <Row>
                                 <Col>
                                 <Row>
-                                    <Col><Form.Control name="day" onChange={handleChange}  /></Col>
+                                    <Col><Form.Control name="day" onChange={handleChange}  required/></Col>
                                     <Col><Form.Label>Day</Form.Label></Col>
                                     </Row>
                                 </Col>
                                 <Col>
                                 <Row>
-                                    <Col><Form.Control name="night" onChange={ handleChange }  /></Col>
+                                    <Col><Form.Control name="night" onChange={ handleChange }  required/></Col>
                                     <Col><Form.Label>Night</Form.Label></Col>
                                     </Row>
                                 </Col>
@@ -163,37 +163,34 @@ function AddTrip() {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Date Trip</Form.Label>
-                            <Form.Control name="dateTrip" onChange={handleChange}   />
+                            <Form.Control name="dateTrip" onChange={handleChange}   required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Price</Form.Label>
-                            <Form.Control name="price" type="number" onChange={handleChange }   />
+                            <Form.Control name="price" type="number" onChange={handleChange }   required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Quota</Form.Label>
-                            <Form.Control name="quota" onChange={ handleChange }   />
+                            <Form.Control name="quota" onChange={ handleChange }   required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control name="description" as ="textarea" rows={3} onChange={ handleChange }  />
+                            <Form.Control name="description" as ="textarea" rows={3} onChange={ handleChange }  required/>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Photos</Form.Label>
-                            <Form.Control name="photo" type="file" multiple size="lg" rows={3} onChange={ handleChange}  />
+                            <Form.Control name="photo" type="file" multiple size="lg" rows={3} onChange={ handleChange}  required/>
                         </Form.Group>
-                        {/* <Form.Group controlId="formFileMultiple" className="mb-3">
-                            <Form.Label>Multiple files input example</Form.Label>
-                            <Form.Control type="file" onChange={ handleChange} multiple />
-                        </Form.Group> */}
-                        <Form.Group className="mb-3">
-                            {/* <Button onClick={handleOnSubmit}>Add Trip</Button> */}
-                            <Button type="submit" variant="warning">Add Trip</Button>
-                        </Form.Group>
+                        <div className='text-center'>
+                            <Button type="submit" variant="warning" style={{width: "300"}}>Add Trip</Button>
+                        </div>
+                        
                     </Form>
                 </Container>
             </Container>
             </div>
             <Footer/>
+            
         </>
     )
 }

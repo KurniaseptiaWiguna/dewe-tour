@@ -57,11 +57,19 @@ function Login(props) {
                 localStorage.setItem("token", response.data.token)
             //    })
             //    route.push("/trips")
-                if( response.data.status == "admin"){
-                    route.push("/transactions");
+                // if( response.data.status === "admin"){
+                //     route.push("/transactions");
     
+                // }else{
+                //     route.push("/")
+                // }
+                document.location.reload(true)
+                if(response.data.status === "admin"){
+                    route.push("/transactions")
+
                 }else{
-                    route.push("/")
+                    route.push("/transactions")
+
                 }
             // }
             // status checking

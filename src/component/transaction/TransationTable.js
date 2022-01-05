@@ -10,9 +10,6 @@ function TransationTable() {
     const api = API();
     const [dataId, setDataId] = useState();
     const [show, setShow] = useState(false);
-    const [form, setForm] = useState({
-        status: "",
-    })
     const handleClose = () => setShow(false);
     const handleOpen = () => setShow(true);
 
@@ -37,7 +34,9 @@ function TransationTable() {
     const action = async (e) => {
         console.log(e)
         try {
-            
+            const form = {
+                status: e,
+            }
             const body = JSON.stringify(form);
             const config2 = {
                 method: "PATCH",
@@ -134,12 +133,10 @@ function TransationTable() {
                     <td>{data.id}</td>
                     <td>{data.user.fullname}</td>
                     <td>{data.trip.title}</td>
-                    <td>{<a href={`http://localhost:5000/uploads/${data.attachment}`}>{data.attachment}</a>}</td>
+                    <td>{<a href={`http://localhost:5000/uploads/${data.attachment}`} target="_blank">{data.attachment}</a>}</td>
                     <td>{getStatus(data.status)}</td>
                     <td>
-       {/* <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button> */}
+       
       <img src={require("../../assets/img/search 1.png").default} height="30px" style={{cursor:"pointer"}} onClick={() => {setDataId(data.id); handleOpen()} }/>
       {
           
@@ -247,22 +244,15 @@ function TransationTable() {
                 </Modal.Body>
         <Modal.Footer>
           <Button variant="danger"
-            onClick={() => {
-                setForm({
-                    status: "Cancel",
-                })
-                action()
-            }} 
-            >
+            onClick={()=> {action("Cancel")}}>
             Cancel
           </Button>
           <Button variant="success"
           onClick={() => {
-            setForm({
-                status: "Approved",
-            })
-              action()
-          }}>
+            action("Approved")
+          }
+              
+          }>
             Approve
           </Button>
         </Modal.Footer>

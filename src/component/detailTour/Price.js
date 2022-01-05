@@ -64,9 +64,7 @@ function Price(props) {
             console.log(body)
             const response = await api.post("/transaction", config);
             console.log(response)
-            if(response.status == "success"){
-                handleOpen();
-            } 
+            route.push(`/payment/${response.data.id}`)
             // route.push(`/payment/${response.data.id}`)
         }catch(e){
             console.log(e)
