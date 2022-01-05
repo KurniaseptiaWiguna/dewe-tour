@@ -50,6 +50,8 @@ export default function Home(){
             };
             const response = await api.get(`/search/${search}`,config)
             setData(response.data)
+            const elemnt = document.getElementById("trips");
+            elemnt.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         } catch (error) {
             console.log(error)
         }
@@ -97,9 +99,10 @@ export default function Home(){
                 </Col>
             </Row> 
         </Container>
-            <h1 className="text-center my-5">Group Tour</h1>
+            
         
-        <Container>
+        <Container id="trips">
+            <h1 className="text-center my-5">Group Tour</h1>
             {data?.length > 0 ? 
                 <Row>
                     {data?.map(item => 

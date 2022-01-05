@@ -10,6 +10,7 @@ import {API} from '../../config/api'
 function ProfileCard() {
     
     const [state, dispatch] = useContext(AppContext)
+    const [user, setUser] = useState();
     const [form, setForm] = useState({
         fullname: "",
         email: "",
@@ -28,35 +29,53 @@ function ProfileCard() {
     document.title = "Profile";
     
 
-    let {data: user , refetch} = useQuery("userCache", async () => {
+    // let {data: user , refetch} = useQuery("userCache", async () => {
+    //     const config = {
+    //         method: "GET",
+    //         headers: {
+    //           Authorization: "Basic " + localStorage.token,
+    //         },
+    //       };
+    //     const response = await api.get("user", config);
+    //     if(response.status === "failed") {
+    //         return dispatch({
+    //             type: "AUTH_ERROR",
+    //         })
+    //     }
+    //     setForm(response.data);
+    //     return response.data;
+    // })
+    const getProfile =async () => {
         const config = {
             method: "GET",
             headers: {
-              Authorization: "Basic " + localStorage.token,
+            Authorization: "Basic " + localStorage.token,
             },
-          };
+        };
         const response = await api.get("user", config);
         if(response.status === "failed") {
             return dispatch({
-                type: "AUTH_ERROR",
+            type: "AUTH_ERROR",
             })
         }
-        setForm(response.data);
-        setNewForm(response.data)
-        return response.data;
-    })
+        setUser(response.data)
+        setForm(response.data)
+    }
     const handleChange = (e) => {
         setForm({
             ...form,
             [e.target.name]:
             e.target.type === "file" ? e.target.files : e.target.value
         })
-        setPhoto(
-            e.target.files
+        
          
-         );
         
         if (e.target.name === "photo") {
+            if(photo == null){
+                setPhoto(
+                    e.target.files
+                 );
+             }
             let url = URL.createObjectURL(e.target.files[0]);
             console.log(e.target.files[0].name)
             setprevimage(url);
@@ -71,8 +90,12 @@ function ProfileCard() {
             formData.set("fullname", form.fullname)
             formData.set("email", form.email)
             formData.set("phone", form.phone)
+            formData.set("gender", form.gender)
             formData.set("address", form.address)
-            formData.set("photo", photo[0], photo[0]?.name)
+            if(photo != null){
+                formData.set("photo", photo[0], photo[0]?.name)
+            }
+            
 
             const config = {
                 method: "PATCH",
@@ -83,15 +106,21 @@ function ProfileCard() {
 
             }
             const response = await api.patch("/user", config)
-            refetch();
+            getProfile();
             handleClose();
             setprevimage(null)
+            setPhoto(null)
 
         } catch (error) {
             console.log(error)
         }
     }
-    console.log(form.photo)
+    useEffect(() => {
+        getProfile();
+    },[])
+    useEffect(() => {
+       console.log(form)
+    }, [form])
     return (
         <>
             <Modal.Dialog size="lg">
@@ -166,11 +195,9 @@ function ProfileCard() {
             </Modal.Dialog>
 
             <Modal show={show} onHide={handleClose} size="lg">
-                <Modal.Header>
-                    <h3 className="fw-bolder">Edit Profile</h3>
-                    
-                </Modal.Header>
                 <Modal.Body>
+                <h3 className="font-weight-bolder">Edit Profile</h3>
+
                 <Form onSubmit={handleSubmit}>
                     <Row>
                         <Col>
@@ -186,6 +213,10 @@ function ProfileCard() {
                         <Form.Group>
                             <label>Phone number</label>
                             <Form.Control placeholder='Phone number' name="phone" onChange={handleChange} defaultValue={form.phone}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <label>Gender</label>
+                            <Form.Control placeholder='Gender' name="gender" onChange={handleChange} defaultValue={form.gender}/>
                         </Form.Group>
                         <Form.Group>
                             <label>Address</label>
@@ -208,7 +239,6 @@ function ProfileCard() {
                             
                         </Col>
                     </Row>
-                    <hr></hr>
                     <Button variant='success' className="float-right" type="submit">Update profile</Button>
                     </Form>
                 </Modal.Body>
