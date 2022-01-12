@@ -1,7 +1,7 @@
 import {useState, useContext} from 'react'
 import {useQuery} from 'react-query';
 import { API } from '../config/api';
-import {Container,Row,Col,Form,Modal, Button} from 'react-bootstrap';
+import {Container,Row,Col,Form,Modal, Button, Alert} from 'react-bootstrap';
 import NavigationBar from '../component/Navbar/navbar2';
 import Footer from '../component/footer';
 import {AppContext} from '../contexts/AppContext'
@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 function AddTrip() {
     const api = API();
     const route = useHistory();
+    const [message, setMessage] = useState(null)
     const [form, setForm] = useState({
         title: "",
         idCountry: null,
@@ -86,22 +87,21 @@ function AddTrip() {
                 body: formData,
               };
             const response = await api.post("trip",config);
-            //   setForm({
-            //     title: "",
-            //     idCountry: "",
-            //     accomodation: "",
-            //     transportation: "",
-            //     eat: "",
-            //     day: "",
-            //     night: "",
-            //     dateTrip: "",
-            //     price: "",
-            //     quota: "",
-            //     description: "",
-            //     photo: []
-            //   })
-
-              route.push("/trips")
+              if(response.status === "success"){
+                route.push("/trips")
+              }
+              if(response.status === "failed"){
+                  
+                    const alert = (
+                      <Alert variant='danger' className='py-1'>
+                          <p>{response.message}</p>
+                      </Alert>
+                    )
+                    setMessage(alert)
+                    const elemnt = document.getElementById("top");
+                    elemnt.scrollIntoView({behavior: "smooth", block: "end"});
+              }
+              
             
         } catch (error) {
             console.log(error)   
@@ -112,8 +112,9 @@ function AddTrip() {
             <div className="cover-page">
             <NavigationBar />
             <Container>
-                <h2>Add Trip</h2>
+                <h2 id='top'>Add Trip</h2>
                 <Container className="my-4">
+                    {message && message}
                     <Form className="px-3" onSubmit={handleOnSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Title Trip</Form.Label>

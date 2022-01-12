@@ -6,6 +6,7 @@ import {useQuery} from 'react-query';
 import { API } from '../../config/api';
 import { converToRupiah } from '../../assets/Currency';
 import NoData from '../../assets/img/nodata.png'
+import moment from 'moment';
 function Payments() {
     const [state,dispatch]= useContext(AppContext);
     const api = API();
@@ -76,26 +77,10 @@ function Payments() {
                             <h2 >Booking</h2>
                         </Row>
                         <Row>
-                            <h5 className="text-secondary">{d.bookingDate}</h5>
+                            <h5 className="text-secondary">{moment(d.bookingDate).format('llll')}</h5>
                         </Row>
                         <Row> 
                         {/* onSubmit={(e) => handleSubmit.mutate(e)} */}
-                        <form >
-                        {preview && (
-                <div>
-                  <img
-                    src={preview}
-                    style={{
-                      maxWidth: "150px",
-                      maxHeight: "150px",
-                      objectFit: "cover",
-                    }}
-                    alt="preview"
-                  />
-                </div>
-              )}
-                           
-                            </form>
                         </Row>
                     </Col>
                 </Row>
@@ -115,7 +100,7 @@ function Payments() {
                         <Row>
                             <Col className="my-1">
                                 <Row>Date Trip</Row>
-                                <Row>{d.dateTrip}</Row>
+                                <Row>{moment(d.dateTrip).format('L')}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>
@@ -133,8 +118,11 @@ function Payments() {
                             </Col>
                         </Row>
                     </Col>
-                    <Col md={2}>
-                        <Image src />
+                    <Col md={3}>
+                        {d.attachment != null ? <Image src={"http://localhost:5000/uploads/"+d.attachment} style={{width: "10rem", height: "10rem"}} centered/>:
+                            null
+                        }
+
                     </Col>
                 </Row>
                 </>

@@ -2,6 +2,7 @@ import {useState, useContext, useEffect} from 'react';
 import { useParams,useHistory} from 'react-router-dom';
 import { BsFillCloudArrowUpFill,BsFillCloudCheckFill } from "react-icons/bs";
 import {Row,Col,Modal,Button,Table, Container,Image} from 'react-bootstrap';
+import {ImCross} from 'react-icons/im'
 import {AppContext} from '../../contexts/AppContext';
 import { converToRupiah } from '../../assets/Currency';
 import {useQuery} from 'react-query';
@@ -34,7 +35,7 @@ function PaymentCard() {
     const [show, setShow] = useState(false);
     const handleOpen = () => { setShow(true)}
     const handleClose = () => { setShow(false)}
-
+    const [message, setMessage] = useState(null);
     
     console.log(paymentData)
     const getStatus = () => {
@@ -73,6 +74,17 @@ function PaymentCard() {
     }
     async function handleSubmit(e) {
         e.preventDefault();
+        if(!form.attachment){
+            const alert=(
+                <>
+                    <ImCross size="4rem" color="red" className="mx-auto py-2"/>
+                    <p className='text-center text-danger py-1'>please attach your payment proof</p>
+                </>
+            )
+            setMessage(alert)
+            return  handleOpen()
+            
+        }
         try {
             const formData = new FormData();
             formData.set("status", form.status)
@@ -88,9 +100,15 @@ function PaymentCard() {
 
             };
             const response = await api.patch(`payment/${params.id}`,config)
-            if(response.status == "success"){
+            if(response.status === "success"){
+                const alert = (
+                    <p>Your payment will be confirmed within 1 x 24 hours To see orders click <a href={`/profile`}>Here</a> thank you</p>
+                )
+                setMessage(alert)
                 handleOpen();
+                
             } 
+            
         } catch (error) {
             console.log(error);
         }
@@ -130,7 +148,7 @@ function PaymentCard() {
                         <Row>
                             <Col className="my-1">
                                 <Row>Date Trip</Row>
-                                <Row>{moment(data?.dateTrip).format("llll")}</Row>
+                                <Row>{moment(data?.dateTrip).format("L")}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>
@@ -208,10 +226,13 @@ function PaymentCard() {
 
             
             </Modal.Dialog>
-            <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleSubmit}>Pay</Button>
+            {
+                data?.attachment ? null : <Button variant="warning text-light" className="float-right px-5" size="lg" onClick={handleSubmit}>Pay</Button>
+            }
+            
 
-            <Modal show={show} onHide={handleClose} size='lg' centered>
-                <p>Your payment will be confirmed within 1 x 24 hours To see orders click <a href={`/profile`}>Here</a> thank you</p>
+            <Modal show={show} onHide={handleClose} size='lg' height={100} centered>
+                {message && message}
             </Modal>
             </>
             

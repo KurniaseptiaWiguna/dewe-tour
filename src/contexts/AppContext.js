@@ -15,6 +15,7 @@ const initialState = {
     status: "",
     modalLogin: false,
     modalRegister:false,
+    modalLoading:true,
     modalApprove:false
 
 } ;
@@ -39,6 +40,10 @@ const reducer = (state,action) => {
             return {
                 ...state,
                 modalRegister:false};
+        case 'HIDE_LOADING':
+            return {
+            ...state,
+             modalLoading:false};
         case 'SWITCH_MODAL':
             return {
                 ...state,

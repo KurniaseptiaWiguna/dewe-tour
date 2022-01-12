@@ -4,6 +4,7 @@ import {AppContext} from '../../contexts/AppContext'
 import {converToRupiah} from '../../assets/Currency';
 import { useQuery } from 'react-query';
 import {API} from '../../config/api';
+import moment from 'moment';
 function TransationTable() {
     const [state,dispatch] = useContext(AppContext);
     
@@ -154,9 +155,9 @@ function TransationTable() {
     
   </tbody>
 </Table> 
-<Modal show={show} onHide={handleClose} size="xl">
-                <Modal.Body>
-                <Container>
+<Modal show={show} onHide={handleClose} size="lg">
+    <Modal.Body>
+        <Container>
                 <Row>
                     <Col><img src={require("../../assets/img/Icon2.png").default} height="50px"/></Col>
                     <Col md="auto" className="text-right float-right">
@@ -166,24 +167,25 @@ function TransationTable() {
                         <Row>
                             <h5 className="text-secondary">{dataModal?.bookingDate}</h5>
                         </Row>
+                        
                     </Col>
                 </Row>
-                
+                <Container>
                 <Row>
-                    <Col md="auto">
+                    <Col >
                         <Row> <h3 >{dataModal?.trip.title}</h3></Row>
                         <Row><p>{dataModal?.trip.country.name}</p></Row>
                         <Row>
-                            {/* {
-                                <displayStatus />
-                            } */}
+                            {
+                                getStatus(dataModal?.status)
+                            }
                         </Row>
                     </Col>
                     <Col className="mx-3">
                         <Row>
                             <Col className="my-1">
                                 <Row>Date Trip</Row>
-                                <Row>{dataModal?.dateTrip}</Row>
+                                <Row>{moment(dataModal?.dateTrip).format("llll")}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>
@@ -202,9 +204,16 @@ function TransationTable() {
                         </Row>
                     </Col>
                     <Col>
-                        <Image src />
+                            
+                            <Image src={"http://localhost:5000/uploads/"+dataModal?.attachment} style={{width: "10rem", height:"10rem"}}/>
+                        
                     </Col>
                 </Row>
+
+
+
+                </Container>
+                
                 
 
                 <Table>

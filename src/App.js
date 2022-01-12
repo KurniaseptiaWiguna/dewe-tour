@@ -22,6 +22,7 @@ import UserTransaction from "./component/profile/UserTransaction";
 import {API} from './config/api'
 import PrivateRoute from "./component/PrivateRoute";
 import AdminRoute from "./component/AdminRoute"
+import ModalLoading from "./component/modal/Loading";
 function App() {
   const api = API();
   const route = useHistory();
@@ -66,15 +67,15 @@ function App() {
       <Router>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
         <PrivateRoute exact path="/Paymentlist" component= {PaymentList} />
         <PrivateRoute exact path="/profile" component= {Profile} />
         <PrivateRoute exact path="/payment/:id" component={Payment} />
+        <PrivateRoute exact path="/detail-trip/:id" component={DetailTrip} />
         {/* <Route exact path="/payment/:id" component={Payment} /> */}
         <AdminRoute exact path="/trips" component= {Trip}/>
         <AdminRoute exact path="/transactions" component={TransactionsPage} />
         <AdminRoute exact path="/add-trip" component={AddTrip} />
-        <PrivateRoute exact path="/test" component={NotFound}/> 
+        <Route exact path="/test" component={ModalLoading}/> 
         <Route component={NotFound}/>
       </Switch>
     </Router>

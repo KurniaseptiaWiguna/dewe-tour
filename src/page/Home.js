@@ -64,6 +64,7 @@ export default function Home(){
             route.push("/transactions")
         }else if(state.status == "user" ){
             console.log("redirect ke /")
+            
         }
     }
 

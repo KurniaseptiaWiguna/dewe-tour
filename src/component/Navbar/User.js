@@ -31,7 +31,7 @@ function User() {
           <Col><img src={require("../../assets/img/bill 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>Pay</Col>
           </Row>
         </NavLink>
-        <NavLink onClick={()=> {dispatch({ type: 'LOGOUT' }); route.push("/")}}>
+        <NavLink onClick={()=> {document.location.reload(); dispatch({ type: 'LOGOUT' }); route.push("/"); }}>
         <Row >
           <Col><img src={require("../../assets/img/logout 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>Logout</Col>
           </Row>
@@ -53,7 +53,7 @@ function User() {
           <Col><img src={require("../../assets/img/transaction-history.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>transaction</Col>
           </Row>
         </NavLink>
-        <NavLink onClick={()=> {dispatch({ type: 'LOGOUT' }); route.push("/")}}>
+        <NavLink onClick={()=> { document.location.reload();dispatch({ type: 'LOGOUT' }); route.push("/");}}>
         <Row >
           <Col><img src={require("../../assets/img/logout 1.png").default} height="30px" style={{cursor:"pointer"}}/></Col><Col>Logout</Col>
           </Row>

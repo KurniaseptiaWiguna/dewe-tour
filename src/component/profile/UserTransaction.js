@@ -86,7 +86,7 @@ useEffect(() => {
                         <Row>
                             <Col className="my-1">
                                 <Row>Date Trip</Row>
-                                <Row>{d.dateTrip}</Row>
+                                <Row>{moment(d.dateTrip).format("L")}</Row>
                             </Col>
                             <Col className="my-1">
                                 <Row>Accomodation</Row>

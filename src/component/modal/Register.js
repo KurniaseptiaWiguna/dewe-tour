@@ -6,7 +6,8 @@ import {
     Form,
     Modal,
     Button,
-    NavLink
+    NavLink,
+    Alert
 } from 'react-bootstrap'
 import { useHistory } from 'react-router'
 import { AppContext } from '../../contexts/AppContext';
@@ -16,6 +17,7 @@ function Register(props) {
     const api = API();
     const route = useHistory();
     const [state, dispatch]= useContext(AppContext)
+    const [message, setMessage] = useState(null);
     const [fullName, setFullName]= useState();
     const [phone, setPhone] = useState();
     const [email, setEmail] = useState();
@@ -59,15 +61,40 @@ function Register(props) {
                     }
                 })
                 localStorage.setItem("token", response.data.token)
+                if(response.status === "success"){
+                    const alert = (
+                        <Alert variant='success' className='py-1'>
+                            Login success
+                        </Alert>
+                    )
+                    setMessage(alert)
+                    
+                    document.location.reload(true)
+                    setMessage(null)
+                    if(response.data.status === "admin"){
+                        route.push("/transactions")
 
-                if( response.data.status == "admin"){
-                    route.push("/transactions");
-    
+                    }else{
+                        route.push("/transactions")
+
+                    }
                 }else{
-                    route.push("/")
+                    const alert = (
+                        <Alert variant='danger' className='py-1'>
+                            Login failed
+                        </Alert>
+                    )
+                    setMessage(alert)
                 }
-        }catch(e){
-            console.log(e)
+                
+        }catch(error){
+            const alert = (
+                <Alert variant='danger' className='py-1'>
+                    Login failed
+                </Alert>
+            )
+            setMessage(alert)
+            console.log(error)
         }
         
     }
@@ -77,6 +104,7 @@ function Register(props) {
     return (
         <>
            <Modal show={props.show} onHide={props.handleClose} className="modal-dialog-centered" style={{width:"20rem",marginLeft:"40%"}}>
+               {message && message}
                <Row>
                    <Col><span className="leaf position-absolute  top-0 start-100 align-items-right"></span></Col>
                    <Col>

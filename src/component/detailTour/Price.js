@@ -4,15 +4,13 @@ import {converToRupiah} from '../../assets/Currency';
 import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
 import {API} from '../../config/api'
-function Price(props) {
+function Price({id, idTrip,price,dateTrip}) {
     const api = API();
-    const idTrip = props.idTrip;
-    const dateTrip = props.dateTrip;
     const format = date => date.toISOString().slice(0, 10);
 
     let bookingDate = format(new Date());
-    const [price, setPrice] = useState(props.price);
-    const [total, setTotal] = useState();
+    const [display, setDisplay] = useState(0)
+    const [total, setTotal] = useState(0);
     const [count, setCount] = useState(1);
     const [state, dispatch]= useContext(AppContext)
     const route = useHistory();
@@ -20,15 +18,23 @@ function Price(props) {
     const [show, setShow] = useState(false);
     const handleOpen = () => { setShow(true)}
     const handleClose = () => { setShow(false)}
-    async function getData() {
-        await setTotal(count * props.price)
+    function getData() {
+        setTotal(count * price)
     }
+    
     useEffect(() => {
+        console.log(id)
+        console.log(price)
         getData()
+
+    }, [])
+    useEffect(() => {
+        getData();
     }, [])
 
     useEffect(() => {
-       getData();
+       setTotal(count * price)
+       setDisplay(total)
     }, [count])
 
     function decrease(){
@@ -73,9 +79,9 @@ function Price(props) {
     
     return (
         <> 
-        <Container className="mb-4">
+        <Container className="mb-4" key={id}>
             <Row>
-                <Col><h5 className="font-weight-bold"><span className="text-warning">{converToRupiah(props.price)}</span> / Person</h5></Col>
+                <Col><h5 className="font-weight-bold"><span className="text-warning">{id}{converToRupiah(price)}</span> / Person</h5></Col>
                 <Col md="auto">
                     <Row>
                         <div className="mx-2">

@@ -28,23 +28,6 @@ function ProfileCard() {
     let api = API();
     document.title = "Profile";
     
-
-    // let {data: user , refetch} = useQuery("userCache", async () => {
-    //     const config = {
-    //         method: "GET",
-    //         headers: {
-    //           Authorization: "Basic " + localStorage.token,
-    //         },
-    //       };
-    //     const response = await api.get("user", config);
-    //     if(response.status === "failed") {
-    //         return dispatch({
-    //             type: "AUTH_ERROR",
-    //         })
-    //     }
-    //     setForm(response.data);
-    //     return response.data;
-    // })
     const getProfile =async () => {
         const config = {
             method: "GET",
